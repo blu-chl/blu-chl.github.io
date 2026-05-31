@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Benjamin Lara — Proyectos</title>
+  <meta name="description" content="Portfolio de proyectos de Benjamin Lara Urra" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fafafa;
+      --surface: #ffffff;
+      --border: #e8e8e8;
+      --text: #111111;
+      --muted: #6b7280;
+      --accent: #111111;
+      --radius: 12px;
+      --transition: 200ms ease;
+    }
+
+    html { background: var(--bg); color: var(--text); }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 0 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 80px 0 56px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 56px;
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      letter-spacing: -0.5px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 40px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    .links {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color var(--transition);
+    }
+
+    .links a:hover { color: var(--text); }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    /* ── Projects grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 16px;
+      margin-bottom: 80px;
+    }
+
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      header { padding: 48px 0 40px; }
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: #c0c0c0;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+      transform: translateY(-2px);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 8px;
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      transition: background var(--transition), border-color var(--transition), gap var(--transition);
+      align-self: flex-start;
+    }
+
+    .card:hover .card-cta {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+      gap: 10px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 100px;
+      background: #f3f4f6;
+      color: #4b5563;
+      letter-spacing: 0.02em;
+    }
+
+    /* Card accent strip */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-green::before { background: #22c55e; }
+    .card-blue::before  { background: #3b82f6; }
+    .card-purple::before { background: #a855f7; }
+    .card-orange::before { background: #f97316; }
+
+    .icon-green  { background: #f0fdf4; }
+    .icon-blue   { background: #eff6ff; }
+    .icon-purple { background: #faf5ff; }
+    .icon-orange { background: #fff7ed; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0 40px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="avatar">BL</div>
+    <h1>Benjamin Lara Urra</h1>
+    <p class="subtitle">Proyectos que he construido — desde apps web hasta herramientas personales.</p>
+    <div class="links">
+      <a href="https://github.com/blu-chl" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        github.com/blu-chl
+      </a>
+    </div>
+  </header>
+
+  <p class="section-label">Proyectos</p>
+
+  <div class="grid">
+
+    <!-- Deportes Temuco -->
+    <a class="card card-green" href="https://github.com/blu-chl/deportes-temuco" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="icon icon-green">⚽</div>
+      </div>
+      <div class="card-title">Deportes Temuco</div>
+      <p class="card-desc">
+        Plataforma de gestión de datos para un club de fútbol. Registra partidos, estadísticas de jugadores, goles por período y seguimiento de la temporada.
+      </p>
+      <div class="tags">
+        <span class="tag">HTML</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Supabase</span>
+        <span class="tag">Stats</span>
+      </div>
+      <span class="card-cta">Ver proyecto →</span>
+    </a>
+
+    <!-- Writerly -->
+    <a class="card card-blue" href="https://github.com/blu-chl/writerly" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="icon icon-blue">✍️</div>
+      </div>
+      <div class="card-title">Writerly</div>
+      <p class="card-desc">
+        App de escritura con editor limpio, gestión de documentos y autenticación de usuarios. Construida con stack moderno para una experiencia fluida.
+      </p>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">Vite</span>
+        <span class="tag">Supabase</span>
+        <span class="tag">Tailwind</span>
+      </div>
+      <span class="card-cta">Ver proyecto →</span>
+    </a>
+
+    <!-- Diario -->
+    <a class="card card-purple" href="https://github.com/blu-chl/diario" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="icon icon-purple">📔</div>
+      </div>
+      <div class="card-title">Diario Personal</div>
+      <p class="card-desc">
+        Diario multi-usuario con contraseñas, fotos en entradas, 10 paletas de color y 6 tipografías. Un solo archivo HTML, sin servidor ni dependencias.
+      </p>
+      <div class="tags">
+        <span class="tag">HTML</span>
+        <span class="tag">Vanilla JS</span>
+        <span class="tag">LocalStorage</span>
+      </div>
+      <span class="card-cta">Ver proyecto →</span>
+    </a>
+
+    <!-- Rutina Diaria -->
+    <a class="card card-orange" href="https://github.com/blu-chl/rutina-diaria" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="icon icon-orange">🌅</div>
+      </div>
+      <div class="card-title">Rutina Diaria</div>
+      <p class="card-desc">
+        Organizador de rutina personal con diseño dark mode inmersivo. Ayuda a planificar y hacer seguimiento de hábitos y tareas del día.
+      </p>
+      <div class="tags">
+        <span class="tag">HTML</span>
+        <span class="tag">CSS</span>
+        <span class="tag">JavaScript</span>
+      </div>
+      <span class="card-cta">Ver proyecto →</span>
+    </a>
+
+  </div>
+
+  <footer>
+    Construido con HTML puro · Alojado en GitHub Pages
+  </footer>
+
+</body>
+</html>
