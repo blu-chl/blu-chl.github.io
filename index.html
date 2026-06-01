@@ -98,7 +98,7 @@
     /* ── Projects grid ── */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
       gap: 16px;
       margin-bottom: 80px;
     }
@@ -215,15 +215,21 @@
 
     .card:hover::before { opacity: 1; }
 
-    .card-green::before { background: #22c55e; }
-    .card-blue::before  { background: #3b82f6; }
+    .card-green::before  { background: #22c55e; }
+    .card-blue::before   { background: #3b82f6; }
     .card-purple::before { background: #a855f7; }
     .card-orange::before { background: #f97316; }
+    .card-teal::before   { background: #14b8a6; }
+    .card-indigo::before { background: #6366f1; }
+    .card-rose::before   { background: #f43f5e; }
 
     .icon-green  { background: #f0fdf4; }
     .icon-blue   { background: #eff6ff; }
     .icon-purple { background: #faf5ff; }
     .icon-orange { background: #fff7ed; }
+    .icon-teal   { background: #f0fdfa; }
+    .icon-indigo { background: #eef2ff; }
+    .icon-rose   { background: #fff1f2; }
 
     /* ── Footer ── */
     footer {
@@ -318,6 +324,58 @@
         <span class="tag">HTML</span>
         <span class="tag">CSS</span>
         <span class="tag">JavaScript</span>
+      </div>
+      <span class="card-cta">Ver proyecto →</span>
+    </a>
+
+    <!-- Mi Semana -->
+    <a class="card card-teal" href="https://github.com/blu-chl/mi-semana" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="icon icon-teal">📅</div>
+      </div>
+      <div class="card-title">Mi Semana</div>
+      <p class="card-desc">
+        App de rutina semanal con seguimiento de hábitos, progreso visual y perfiles de usuario. Desplegada en GitHub Pages.
+      </p>
+      <div class="tags">
+        <span class="tag">HTML</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">GitHub Pages</span>
+      </div>
+      <span class="card-cta">Ver proyecto →</span>
+    </a>
+
+    <!-- SplitCuenta -->
+    <a class="card card-indigo" href="https://github.com/blu-chl/splitcuenta" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="icon icon-indigo">🧾</div>
+      </div>
+      <div class="card-title">SplitCuenta</div>
+      <p class="card-desc">
+        App para dividir cuentas en grupo. Asigna ítems por persona, agrega propina y comparte el desglose con un link único.
+      </p>
+      <div class="tags">
+        <span class="tag">Next.js</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">Tailwind</span>
+      </div>
+      <span class="card-cta">Ver proyecto →</span>
+    </a>
+
+    <!-- Tynt -->
+    <a class="card card-rose" href="https://github.com/blu-chl/tynt" target="_blank" rel="noopener">
+      <div class="card-top">
+        <div class="icon icon-rose">📖</div>
+      </div>
+      <div class="card-title">Tynt</div>
+      <p class="card-desc">
+        Editor de libros con escritura por capítulos, modo foco y autenticación de usuarios. Stack moderno con Vite y Supabase.
+      </p>
+      <div class="tags">
+        <span class="tag">React</span>
+        <span class="tag">Vite</span>
+        <span class="tag">Supabase</span>
+        <span class="tag">TypeScript</span>
       </div>
       <span class="card-cta">Ver proyecto →</span>
     </a>
