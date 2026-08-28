@@ -25,23 +25,204 @@
     --transition: 180ms ease;
   }
 
-  html, body {
-    height: 100%;
-    overflow: hidden;
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
+  }
+
+  /* ── Hero ── */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 90px 24px 40px;
+    overflow: hidden;
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(169,130,63,0.12) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+  }
+
+  #hero::after {
+    content: '';
+    position: absolute;
+    top: -12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 720px;
+    height: 620px;
+    background: radial-gradient(ellipse at center, rgba(169,130,63,0.14) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-social {
+    position: absolute;
+    top: 26px;
+    right: 30px;
+    display: flex;
+    gap: 16px;
+    z-index: 2;
+  }
+
+  .hero-social a {
+    color: var(--muted);
+    display: flex;
+    transition: color var(--transition);
+  }
+
+  .hero-social a:hover { color: var(--accent); }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 620px;
+  }
+
+  @keyframes heroUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-photo-ring {
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    padding: 5px;
+    background: linear-gradient(135deg, var(--accent), rgba(169,130,63,0.15) 65%);
+    box-shadow: 0 18px 50px rgba(169,130,63,0.22);
+    margin-bottom: 30px;
+    animation: heroUp 700ms ease both;
+  }
+
+  .hero-photo-ring img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: var(--surface);
+  }
+
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+    animation: heroUp 700ms ease 80ms both;
+  }
+
+  .hero-name {
+    font-family: var(--font-serif);
+    font-size: clamp(38px, 6vw, 58px);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.08;
+    margin-bottom: 22px;
+    animation: heroUp 700ms ease 160ms both;
+  }
+
+  .hero-intro {
+    font-size: 16.5px;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 40px;
+    animation: heroUp 700ms ease 240ms both;
+  }
+
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 64px;
+    animation: heroUp 700ms ease 320ms both;
+  }
+
+  .hero-pills a {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: 100px;
+    padding: 13px 26px;
+    transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
+  }
+
+  .hero-pills a:first-child {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .hero-pills a:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-pills a:first-child:hover {
+    color: #fff;
+    background: #93712f;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  .hero-scroll {
+    position: relative;
+    z-index: 1;
+    color: var(--muted);
+    cursor: pointer;
+    animation: bounce 2.2s ease-in-out infinite;
+    transition: color var(--transition);
+  }
+
+  .hero-scroll:hover { color: var(--accent); }
+
+  @media (max-width: 560px) {
+    #hero { padding: 110px 20px 32px; }
+    .hero-photo-ring { width: 150px; height: 150px; }
+    .hero-social { position: static; margin-bottom: 28px; }
+    .hero-content { align-items: center; }
+  }
+
+  /* ── App shell ── */
+  #app {
+    height: 100vh;
     display: flex;
     flex-direction: column;
   }
 
-  /* ── Header ── */
   header.topbar {
     flex-shrink: 0;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 10;
     background: var(--bg);
     border-bottom: 1px solid var(--border);
   }
@@ -61,6 +242,12 @@
   }
 
   .social-corner a:hover { color: var(--accent); }
+
+  .home-link {
+    padding-right: 20px;
+    margin-right: 20px;
+    border-right: 1px solid var(--border);
+  }
 
   .brand {
     text-align: center;
@@ -117,14 +304,16 @@
   .subnav a.active { color: var(--text); border-color: var(--accent); }
 
   @media (max-width: 560px) {
-    .social-corner { position: static; justify-content: center; padding: 16px 0 0; }
-    .brand { padding: 12px 24px 16px; }
-    .subnav { gap: 22px; }
+    .social-corner { position: static; justify-content: center; padding: 10px 0 0; }
+    .brand { padding: 8px 24px 16px; }
+    .subnav { gap: 14px 18px; flex-wrap: wrap; }
+    .home-link { padding-right: 14px; margin-right: 0; }
   }
 
   /* ── Sliding viewport ── */
   .viewport {
     flex: 1;
+    min-height: 0;
     overflow: hidden;
     position: relative;
   }
@@ -425,8 +614,8 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="social-corner">
+<section id="hero">
+  <div class="hero-social">
     <a href="https://github.com/blu-chl" target="_blank" rel="noopener" aria-label="GitHub">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
     </a>
@@ -441,263 +630,301 @@
     </a>
   </div>
 
-  <div class="brand">
-    <img class="brand-photo" src="foto.jpg" alt="Benjamin Lara Urra" onerror="this.remove()">
-    <p class="brand-name">Benjamin Lara Urra</p>
-    <p class="brand-title">Ingeniero Comercial</p>
+  <div class="hero-content">
+    <div class="hero-photo-ring">
+      <img src="foto.jpg" alt="Benjamin Lara Urra" onerror="this.parentElement.style.display='none'">
+    </div>
+    <p class="hero-eyebrow">Ingeniero Comercial</p>
+    <h1 class="hero-name">Benjamin Lara Urra</h1>
+    <p class="hero-intro">Combino análisis financiero, control de gestión y desarrollo de software para construir herramientas que resuelven problemas reales — con precisión analítica y ejecución técnica.</p>
+    <div class="hero-pills">
+      <a href="#sobre" data-index="0">Sobre mí</a>
+      <a href="#proyectos" data-index="1">Proyectos</a>
+      <a href="#stack" data-index="2">Stack</a>
+    </div>
   </div>
 
-  <nav class="subnav" id="nav">
-    <a href="#sobre" class="active" data-index="0">Sobre mí</a>
-    <a href="#proyectos" data-index="1">Proyectos</a>
-    <a href="#stack" data-index="2">Stack</a>
-  </nav>
-</header>
+  <div class="hero-scroll" id="heroScroll" aria-label="Bajar">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+  </div>
+</section>
 
-<div class="viewport">
-  <div class="track" id="track">
+<div id="app">
+  <header class="topbar">
+    <div class="social-corner">
+      <a href="https://github.com/blu-chl" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a href="https://linkedin.com/in/blu-ingeco" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="mailto:benjamin.lara.urra@gmail.com" aria-label="Email">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      </a>
+      <a href="tel:+56984281982" aria-label="Teléfono">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </a>
+    </div>
 
-    <section class="panel" id="sobre">
-      <div class="panel-inner">
-        <p class="section-label">Sobre mí</p>
-        <p class="lead">Ingeniero Comercial bilingüe (Business English C1) con formación sólida en análisis financiero, control de gestión y evaluación de proyectos. Experiencia en conciliaciones contables, control presupuestario y optimización de procesos operativos. Manejo Python, SQL, Tableau y Power BI para automatizar reportes, y construyo herramientas digitales que combinan gestión con desarrollo de software.</p>
+    <div class="brand">
+      <img class="brand-photo" src="foto.jpg" alt="Benjamin Lara Urra" onerror="this.remove()">
+      <p class="brand-name">Benjamin Lara Urra</p>
+      <p class="brand-title">Ingeniero Comercial</p>
+    </div>
 
-        <p class="sub-label">¿Por qué trabajar conmigo?</p>
-        <ul class="checklist">
-          <li><span class="check">✓</span> Orientado a resultados y trabajo bajo presión</li>
-          <li><span class="check">✓</span> Bilingüe — Inglés C1 (certificado)</li>
-          <li><span class="check">✓</span> Experiencia internacional en equipos multiculturales</li>
-          <li><span class="check">✓</span> Manejo de datos: Python, SQL, Power BI, Tableau</li>
-          <li><span class="check">✓</span> Control financiero real: conciliaciones y presupuesto</li>
-          <li><span class="check">✓</span> Autodidacta en desarrollo de software</li>
-        </ul>
+    <nav class="subnav" id="nav">
+      <a href="#hero" class="home-link" id="navHome">Inicio</a>
+      <a href="#sobre" class="panel-link active" data-index="0">Sobre mí</a>
+      <a href="#proyectos" class="panel-link" data-index="1">Proyectos</a>
+      <a href="#stack" class="panel-link" data-index="2">Stack</a>
+    </nav>
+  </header>
 
-        <div class="about-columns">
-          <div>
-            <p class="sub-label">Experiencia</p>
-            <ul class="timeline">
-              <li>
-                <span class="tl-period">Ago. 2024 — Nov. 2024</span>
-                <span class="tl-role">Practicante Finanzas, RRHH y Contabilidad · Agrifor, Temuco</span>
-                <p class="tl-desc">Rediseñé en Excel el sistema de planificación de turnos para 150 personas (100% de mejora en cobertura) y apoyé la conciliación y cierre mensual del área de Finanzas.</p>
-              </li>
-              <li>
-                <span class="tl-period">Dic. 2022 — Mar. 2023</span>
-                <span class="tl-role">Practicante Gestión Comercial y Finanzas · Agrotop, Padre Las Casas</span>
-                <p class="tl-desc">Soporte en cierre de 2 a 3 contratos agrícolas diarios sobre $1.000.000 c/u y control de flujos de pago a una cartera amplia de proveedores de La Araucanía.</p>
-              </li>
-              <li>
-                <span class="tl-period">Dic. 2023 — Mar. 2024</span>
-                <span class="tl-role">Work &amp; Travel — Operaciones y Calidad · The Charleston Place (5★), EE.UU.</span>
-                <p class="tl-desc">Gestión logística en hotel de categoría cinco estrellas bajo estándares internacionales de calidad, coordinando equipos multiculturales en inglés.</p>
-              </li>
-              <li>
-                <span class="tl-period">Dic. 2024 — Mar. 2025</span>
-                <span class="tl-role">Work &amp; Travel — Gestión Operativa · Coast Pizza, Alaska, EE.UU.</span>
-                <p class="tl-desc">Gestión de producción en entorno de alta demanda, con comunicación exclusivamente en inglés en un equipo multicultural.</p>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p class="sub-label">Educación</p>
-            <ul class="timeline">
-              <li>
-                <span class="tl-period">2020 — 2025</span>
-                <span class="tl-role">Ingeniería Comercial · Universidad Mayor, Temuco</span>
-                <p class="tl-desc">Diploma de Alto Honor Académico — Promedio 6.2/7.0. Proyectos de análisis financiero, evaluación de inversiones y valoración de activos.</p>
-              </li>
-              <li>
-                <span class="tl-period">Sep. 2023 — Ene. 2024</span>
-                <span class="tl-role">Formación en el Extranjero · Hogeschool Vives, Bélgica</span>
-                <p class="tl-desc">Cinco meses de experiencia académica 100% internacional — cursos en inglés de Marketing Internacional, Economía Social, Decisiones con IA y Finanzas Aplicadas.</p>
-              </li>
-            </ul>
-            <p class="sub-label" style="margin-top: 40px;">Certificaciones</p>
-            <div class="stack-row">
-              <span class="stack-chip">Python Intermedio</span>
-              <span class="stack-chip">Power BI Intermedio</span>
-              <span class="stack-chip">Excel Avanzado</span>
-              <span class="stack-chip">Inglés C1 Avanzado</span>
-              <span class="stack-chip">Licencia Clase B</span>
+  <div class="viewport">
+    <div class="track" id="track">
+
+      <section class="panel" id="sobre">
+        <div class="panel-inner">
+          <p class="section-label">Sobre mí</p>
+          <p class="lead">Ingeniero Comercial bilingüe (Business English C1) con formación sólida en análisis financiero, control de gestión y evaluación de proyectos. Experiencia en conciliaciones contables, control presupuestario y optimización de procesos operativos. Manejo Python, SQL, Tableau y Power BI para automatizar reportes, y construyo herramientas digitales que combinan gestión con desarrollo de software.</p>
+
+          <p class="sub-label">¿Por qué trabajar conmigo?</p>
+          <ul class="checklist">
+            <li><span class="check">✓</span> Orientado a resultados y trabajo bajo presión</li>
+            <li><span class="check">✓</span> Bilingüe — Inglés C1 (certificado)</li>
+            <li><span class="check">✓</span> Experiencia internacional en equipos multiculturales</li>
+            <li><span class="check">✓</span> Manejo de datos: Python, SQL, Power BI, Tableau</li>
+            <li><span class="check">✓</span> Control financiero real: conciliaciones y presupuesto</li>
+            <li><span class="check">✓</span> Autodidacta en desarrollo de software</li>
+          </ul>
+
+          <div class="about-columns">
+            <div>
+              <p class="sub-label">Experiencia</p>
+              <ul class="timeline">
+                <li>
+                  <span class="tl-period">Ago. 2024 — Nov. 2024</span>
+                  <span class="tl-role">Practicante Finanzas, RRHH y Contabilidad · Agrifor, Temuco</span>
+                  <p class="tl-desc">Rediseñé en Excel el sistema de planificación de turnos para 150 personas (100% de mejora en cobertura) y apoyé la conciliación y cierre mensual del área de Finanzas.</p>
+                </li>
+                <li>
+                  <span class="tl-period">Dic. 2022 — Mar. 2023</span>
+                  <span class="tl-role">Practicante Gestión Comercial y Finanzas · Agrotop, Padre Las Casas</span>
+                  <p class="tl-desc">Soporte en cierre de 2 a 3 contratos agrícolas diarios sobre $1.000.000 c/u y control de flujos de pago a una cartera amplia de proveedores de La Araucanía.</p>
+                </li>
+                <li>
+                  <span class="tl-period">Dic. 2023 — Mar. 2024</span>
+                  <span class="tl-role">Work &amp; Travel — Operaciones y Calidad · The Charleston Place (5★), EE.UU.</span>
+                  <p class="tl-desc">Gestión logística en hotel de categoría cinco estrellas bajo estándares internacionales de calidad, coordinando equipos multiculturales en inglés.</p>
+                </li>
+                <li>
+                  <span class="tl-period">Dic. 2024 — Mar. 2025</span>
+                  <span class="tl-role">Work &amp; Travel — Gestión Operativa · Coast Pizza, Alaska, EE.UU.</span>
+                  <p class="tl-desc">Gestión de producción en entorno de alta demanda, con comunicación exclusivamente en inglés en un equipo multicultural.</p>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p class="sub-label">Educación</p>
+              <ul class="timeline">
+                <li>
+                  <span class="tl-period">2020 — 2025</span>
+                  <span class="tl-role">Ingeniería Comercial · Universidad Mayor, Temuco</span>
+                  <p class="tl-desc">Diploma de Alto Honor Académico — Promedio 6.2/7.0. Proyectos de análisis financiero, evaluación de inversiones y valoración de activos.</p>
+                </li>
+                <li>
+                  <span class="tl-period">Sep. 2023 — Ene. 2024</span>
+                  <span class="tl-role">Formación en el Extranjero · Hogeschool Vives, Bélgica</span>
+                  <p class="tl-desc">Cinco meses de experiencia académica 100% internacional — cursos en inglés de Marketing Internacional, Economía Social, Decisiones con IA y Finanzas Aplicadas.</p>
+                </li>
+              </ul>
+              <p class="sub-label" style="margin-top: 40px;">Certificaciones</p>
+              <div class="stack-row">
+                <span class="stack-chip">Python Intermedio</span>
+                <span class="stack-chip">Power BI Intermedio</span>
+                <span class="stack-chip">Excel Avanzado</span>
+                <span class="stack-chip">Inglés C1 Avanzado</span>
+                <span class="stack-chip">Licencia Clase B</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="panel" id="proyectos">
-      <div class="panel-inner">
-        <p class="section-label">Proyectos</p>
+      <section class="panel" id="proyectos">
+        <div class="panel-inner">
+          <p class="section-label">Proyectos</p>
 
-        <div class="filter-row" id="filters">
-          <button class="filter-chip active" data-filter="all">Todos</button>
-          <button class="filter-chip" data-filter="web">Web</button>
-          <button class="filter-chip" data-filter="db">Base de Datos</button>
-          <button class="filter-chip" data-filter="python">Python</button>
-          <button class="filter-chip" data-filter="finanzas">Finanzas</button>
+          <div class="filter-row" id="filters">
+            <button class="filter-chip active" data-filter="all">Todos</button>
+            <button class="filter-chip" data-filter="web">Web</button>
+            <button class="filter-chip" data-filter="db">Base de Datos</button>
+            <button class="filter-chip" data-filter="python">Python</button>
+            <button class="filter-chip" data-filter="finanzas">Finanzas</button>
+          </div>
+
+          <div class="project-list">
+
+            <div class="project-row" data-cat="web db">
+              <div class="project-head">
+                <h3>Deportes Temuco</h3>
+                <a class="project-link" href="https://blu-chl.github.io/deportes-temuco/" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">Plataforma de gestión de datos para un club de fútbol. Registra partidos, estadísticas de jugadores, goles por período y seguimiento de la temporada.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231c1c1a" alt="" onerror="this.remove()">PostgreSQL</span>
+              </div>
+            </div>
+
+            <div class="project-row" data-cat="web db">
+              <div class="project-head">
+                <h3>Tynt</h3>
+                <a class="project-link" href="https://blu-chl.github.io/tynt/" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">Editor de libros con escritura por capítulos, modo foco y autenticación de usuarios. Stack moderno con Vite y Supabase.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231c1c1a" alt="" onerror="this.remove()">React</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vite</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind</span>
+              </div>
+            </div>
+
+            <div class="project-row" data-cat="web">
+              <div class="project-head">
+                <h3>Diario Personal</h3>
+                <a class="project-link" href="https://blu-chl.github.io/diario/" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">Diario multi-usuario con contraseñas, fotos en entradas, 10 paletas de color y 6 tipografías. Un solo archivo HTML, sin servidor ni dependencias.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vanilla JS</span>
+                <span class="tech-chip">LocalStorage</span>
+              </div>
+            </div>
+
+            <div class="project-row" data-cat="web">
+              <div class="project-head">
+                <h3>Mi Semana</h3>
+                <a class="project-link" href="https://blu-chl.github.io/mi-semana/" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">App de rutina semanal con seguimiento de hábitos, progreso visual y perfiles de usuario. Desplegada en GitHub Pages.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231c1c1a" alt="" onerror="this.remove()">GitHub Pages</span>
+              </div>
+            </div>
+
+            <div class="project-row" data-cat="web">
+              <div class="project-head">
+                <h3>SplitCuenta</h3>
+                <a class="project-link" href="https://blu-chl.github.io/splitcuenta/" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">App para dividir cuentas en grupo. Escanea la boleta con OCR, asigna ítems por persona, agrega propina y comparte el desglose con un link único.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Next.js</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind</span>
+                <span class="tech-chip">Tesseract.js (OCR)</span>
+              </div>
+            </div>
+
+            <div class="project-row" data-cat="web db finanzas">
+              <div class="project-head">
+                <h3>Kit Financiero para Pastelerías</h3>
+                <a class="project-link" href="https://pasteleria-kit.vercel.app" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">App de gestión financiera para negocios de pastelería. Control de ingresos, gastos, productos y reportes para la toma de decisiones.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Next.js</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind</span>
+              </div>
+            </div>
+
+            <div class="project-row" data-cat="web finanzas">
+              <div class="project-head">
+                <h3>Control de Gastos</h3>
+                <a class="project-link" href="https://blu-chl.github.io/control-gastos/" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">App de finanzas personales para registrar ingresos y gastos, ver distribución por categorías con gráficos y exportar resúmenes a Excel.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Chart.js</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Excel Export</span>
+              </div>
+            </div>
+
+            <div class="project-row" data-cat="python finanzas">
+              <div class="project-head">
+                <h3>Reporte Automático <span class="beta-flag">Beta</span></h3>
+                <a class="project-link" href="https://github.com/blu-chl/reporte-automatico" target="_blank" rel="noopener">Ver proyecto →</a>
+              </div>
+              <p class="project-desc">Script Python que convierte cualquier Excel en un reporte PDF profesional con resumen estadístico, tablas formateadas y soporte multi-hoja.</p>
+              <div class="tech-tags">
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231c1c1a" alt="" onerror="this.remove()">Python</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231c1c1a" alt="" onerror="this.remove()">Pandas</span>
+                <span class="tech-chip">ReportLab</span>
+                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Excel → PDF</span>
+              </div>
+            </div>
+
+          </div>
         </div>
+      </section>
 
-        <div class="project-list">
+      <section class="panel" id="stack">
+        <div class="panel-inner">
+          <p class="section-label">Stack</p>
 
-          <div class="project-row" data-cat="web db">
-            <div class="project-head">
-              <h3>Deportes Temuco</h3>
-              <a class="project-link" href="https://blu-chl.github.io/deportes-temuco/" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">Plataforma de gestión de datos para un club de fútbol. Registra partidos, estadísticas de jugadores, goles por período y seguimiento de la temporada.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231c1c1a" alt="" onerror="this.remove()">PostgreSQL</span>
-            </div>
+          <p class="sub-label">Finanzas &amp; Datos</p>
+          <div class="stack-row" style="margin-bottom: 40px;">
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Excel Avanzado</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/powerbi.svg?color=%231c1c1a" alt="" onerror="this.remove()">Power BI</span>
+            <span class="stack-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1c1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>SQL</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/tableau.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tableau</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231c1c1a" alt="" onerror="this.remove()">Python</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231c1c1a" alt="" onerror="this.remove()">Pandas</span>
           </div>
 
-          <div class="project-row" data-cat="web db">
-            <div class="project-head">
-              <h3>Tynt</h3>
-              <a class="project-link" href="https://blu-chl.github.io/tynt/" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">Editor de libros con escritura por capítulos, modo foco y autenticación de usuarios. Stack moderno con Vite y Supabase.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231c1c1a" alt="" onerror="this.remove()">React</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vite</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind</span>
-            </div>
+          <p class="sub-label">Desarrollo</p>
+          <div class="stack-row">
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231c1c1a" alt="" onerror="this.remove()">React</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Next.js</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vite</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231c1c1a" alt="" onerror="this.remove()">PostgreSQL</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind CSS</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Chart.js</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/git.svg?color=%231c1c1a" alt="" onerror="this.remove()">Git</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/vercel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vercel</span>
+            <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231c1c1a" alt="" onerror="this.remove()">GitHub Pages</span>
           </div>
 
-          <div class="project-row" data-cat="web">
-            <div class="project-head">
-              <h3>Diario Personal</h3>
-              <a class="project-link" href="https://blu-chl.github.io/diario/" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">Diario multi-usuario con contraseñas, fotos en entradas, 10 paletas de color y 6 tipografías. Un solo archivo HTML, sin servidor ni dependencias.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vanilla JS</span>
-              <span class="tech-chip">LocalStorage</span>
-            </div>
-          </div>
-
-          <div class="project-row" data-cat="web">
-            <div class="project-head">
-              <h3>Mi Semana</h3>
-              <a class="project-link" href="https://blu-chl.github.io/mi-semana/" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">App de rutina semanal con seguimiento de hábitos, progreso visual y perfiles de usuario. Desplegada en GitHub Pages.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231c1c1a" alt="" onerror="this.remove()">GitHub Pages</span>
-            </div>
-          </div>
-
-          <div class="project-row" data-cat="web">
-            <div class="project-head">
-              <h3>SplitCuenta</h3>
-              <a class="project-link" href="https://blu-chl.github.io/splitcuenta/" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">App para dividir cuentas en grupo. Escanea la boleta con OCR, asigna ítems por persona, agrega propina y comparte el desglose con un link único.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Next.js</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind</span>
-              <span class="tech-chip">Tesseract.js (OCR)</span>
-            </div>
-          </div>
-
-          <div class="project-row" data-cat="web db finanzas">
-            <div class="project-head">
-              <h3>Kit Financiero para Pastelerías</h3>
-              <a class="project-link" href="https://pasteleria-kit.vercel.app" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">App de gestión financiera para negocios de pastelería. Control de ingresos, gastos, productos y reportes para la toma de decisiones.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Next.js</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind</span>
-            </div>
-          </div>
-
-          <div class="project-row" data-cat="web finanzas">
-            <div class="project-head">
-              <h3>Control de Gastos</h3>
-              <a class="project-link" href="https://blu-chl.github.io/control-gastos/" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">App de finanzas personales para registrar ingresos y gastos, ver distribución por categorías con gráficos y exportar resúmenes a Excel.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Chart.js</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Excel Export</span>
-            </div>
-          </div>
-
-          <div class="project-row" data-cat="python finanzas">
-            <div class="project-head">
-              <h3>Reporte Automático <span class="beta-flag">Beta</span></h3>
-              <a class="project-link" href="https://github.com/blu-chl/reporte-automatico" target="_blank" rel="noopener">Ver proyecto →</a>
-            </div>
-            <p class="project-desc">Script Python que convierte cualquier Excel en un reporte PDF profesional con resumen estadístico, tablas formateadas y soporte multi-hoja.</p>
-            <div class="tech-tags">
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231c1c1a" alt="" onerror="this.remove()">Python</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231c1c1a" alt="" onerror="this.remove()">Pandas</span>
-              <span class="tech-chip">ReportLab</span>
-              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Excel → PDF</span>
-            </div>
-          </div>
-
+          <footer>
+            <span>¿Quieres ver el repo de este portafolio? <a href="https://github.com/blu-chl/blu-chl.github.io" target="_blank" rel="noopener">Código aquí</a></span>
+            <span>© 2026 Benjamin Lara Urra · Todos los derechos reservados.</span>
+          </footer>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="panel" id="stack">
-      <div class="panel-inner">
-        <p class="section-label">Stack</p>
-
-        <p class="sub-label">Finanzas &amp; Datos</p>
-        <div class="stack-row" style="margin-bottom: 40px;">
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Excel Avanzado</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/powerbi.svg?color=%231c1c1a" alt="" onerror="this.remove()">Power BI</span>
-          <span class="stack-chip"><svg viewBox="0 0 24 24" fill="none" stroke="#1c1c1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>SQL</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/tableau.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tableau</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231c1c1a" alt="" onerror="this.remove()">Python</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231c1c1a" alt="" onerror="this.remove()">Pandas</span>
-        </div>
-
-        <p class="sub-label">Desarrollo</p>
-        <div class="stack-row">
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231c1c1a" alt="" onerror="this.remove()">HTML</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231c1c1a" alt="" onerror="this.remove()">JavaScript</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231c1c1a" alt="" onerror="this.remove()">TypeScript</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231c1c1a" alt="" onerror="this.remove()">React</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Next.js</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vite</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231c1c1a" alt="" onerror="this.remove()">PostgreSQL</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231c1c1a" alt="" onerror="this.remove()">Supabase</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231c1c1a" alt="" onerror="this.remove()">Tailwind CSS</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231c1c1a" alt="" onerror="this.remove()">Chart.js</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/git.svg?color=%231c1c1a" alt="" onerror="this.remove()">Git</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/vercel.svg?color=%231c1c1a" alt="" onerror="this.remove()">Vercel</span>
-          <span class="stack-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231c1c1a" alt="" onerror="this.remove()">GitHub Pages</span>
-        </div>
-
-        <footer>
-          <span>¿Quieres ver el repo de este portafolio? <a href="https://github.com/blu-chl/blu-chl.github.io" target="_blank" rel="noopener">Código aquí</a></span>
-          <span>© 2026 Benjamin Lara Urra · Todos los derechos reservados.</span>
-        </footer>
-      </div>
-    </section>
-
+    </div>
   </div>
 </div>
 
 <script>
   const track = document.getElementById('track');
-  const navLinks = [...document.querySelectorAll('#nav a')];
+  const navLinks = [...document.querySelectorAll('#nav a.panel-link')];
   const count = navLinks.length;
   let current = 0;
 
@@ -708,7 +935,6 @@
     current = index;
     track.style.transform = `translateX(-${index * (100 / count)}%)`;
     navLinks.forEach((a, i) => a.classList.toggle('active', i === index));
-    history.replaceState(null, '', navLinks[index].getAttribute('href'));
   }
 
   navLinks.forEach((a, i) => {
@@ -718,8 +944,41 @@
     });
   });
 
-  const startIndex = navLinks.findIndex(a => a.getAttribute('href') === location.hash);
-  goTo(startIndex > -1 ? startIndex : 0);
+  goTo(0);
+
+  const app = document.getElementById('app');
+
+  document.querySelectorAll('.hero-pills a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      goTo(parseInt(a.dataset.index, 10));
+      app.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  document.getElementById('heroScroll').addEventListener('click', () => {
+    app.scrollIntoView({ behavior: 'smooth' });
+  });
+
+  document.getElementById('navHome').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  const heroContent = document.querySelector('.hero-content');
+  const hero = document.getElementById('hero');
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const progress = Math.min(window.scrollY / hero.offsetHeight, 1);
+      heroContent.style.transform = `translateY(${progress * 50}px)`;
+      heroContent.style.opacity = String(1 - progress * 1.15);
+      ticking = false;
+    });
+  }, { passive: true });
 
   const filterChips = document.querySelectorAll('.filter-chip');
   const projectRows = document.querySelectorAll('.project-row');
