@@ -473,8 +473,8 @@
     flex-shrink: 0;
     position: relative;
     background: var(--header-glass);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     border-bottom: 1px solid var(--line);
   }
 
@@ -1482,8 +1482,9 @@
   const uDark  = gl.getUniformLocation(prog, 'u_dark');
 
   // render at reduced resolution — marble is soft, nobody sees the difference,
-  // and it keeps the fragment cost sane on laptops
-  const SCALE = 0.5;
+  // and it keeps the fragment cost sane on laptops (and lower still on phones,
+  // where the GPU is weaker and this was visibly janking scroll)
+  const SCALE = window.innerWidth < 700 ? 0.32 : 0.5;
 
   function resize() {
     const w = Math.max(1, Math.floor(window.innerWidth * SCALE));
@@ -1514,7 +1515,16 @@
     if (reduced) requestAnimationFrame(frame);
   };
 
+  // the marble drifts slowly — redrawing at 30fps instead of 60 halves the GPU
+  // cost with no visible loss, which is what was fighting the browser for
+  // frames during scroll and reading as stutter
+  let lastDraw = 0;
+  const FRAME_MS = 1000 / 30;
+
   function frame(now) {
+    if (now - lastDraw < FRAME_MS) { requestAnimationFrame(frame); return; }
+    lastDraw = now;
+
     mx += (tmx - mx) * 0.045;
     my += (tmy - my) * 0.045;
     // ~0.6s to settle, so the stone lands with the 700ms CSS colour transition
@@ -1658,14 +1668,26 @@ document.querySelectorAll('.mg').forEach(btn => {
   const items = [...document.querySelectorAll('#hero .rv'), document.getElementById('heroName')];
   let ticking = false;
 
+  // reading offsetHeight/scrollHeight on every scroll event forces a synchronous
+  // layout recalculation each frame — that's what was reading as the page
+  // "sticking". Both are stable (hero and #app are fixed-height), so measure
+  // once and only re-measure on resize.
+  let heroH = hero.offsetHeight;
+  let maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+
+  function measure() {
+    heroH = hero.offsetHeight;
+    maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  }
+  window.addEventListener('resize', measure, { passive: true });
+
   window.addEventListener('scroll', () => {
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(() => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      prog.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + '%';
+      prog.style.width = (maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0) + '%';
 
-      const p = Math.min(window.scrollY / hero.offsetHeight, 1);
+      const p = Math.min(window.scrollY / heroH, 1);
       items.forEach(el => {
         if (!el) return;
         el.style.opacity = String(Math.max(0, 1 - p * 1.25));
