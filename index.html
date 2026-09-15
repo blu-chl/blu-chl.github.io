@@ -20,11 +20,13 @@
     --line: rgba(26,25,23,0.10);
     --gold: #a9823f;
     --gold-deep: #8a6a2f;
+    --sea: #2f7d8c;
+    --sea-deep: #1f5b68;
     --glass: rgba(255,255,255,0.45);
     --glass-strong: rgba(255,255,255,0.62);
     --header-glass: rgba(251,250,247,0.82);
     --grain-op: 0.30;
-    --vignette: rgba(120,105,80,0.13);
+    --vignette: rgba(20,55,70,0.12);
     --icon-hex: %231a1917;
     --serif: 'Cormorant Garamond', 'Times New Roman', serif;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -38,6 +40,8 @@
     --line: rgba(243,240,234,0.13);
     --gold: #c9a24d;
     --gold-deep: #e2c079;
+    --sea: #4fb3c4;
+    --sea-deep: #7ed1de;
     --glass: rgba(255,255,255,0.05);
     --glass-strong: rgba(255,255,255,0.09);
     --header-glass: rgba(12,11,10,0.78);
@@ -60,23 +64,41 @@
 
   body.locked { overflow: hidden; }
 
-  /* ─────────── Marble canvas ─────────── */
-  #marble {
+  /* ─────────── Scene photos: real ocean → real sand ─────────── */
+  .scene-layer {
     position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
     z-index: 0;
-    display: block;
+    background-size: cover;
+    background-position: center 62%;
+    transition: filter 700ms var(--ease);
   }
 
-  /* graceful fallback when WebGL is unavailable */
-  #marble.no-webgl {
-    background: radial-gradient(ellipse at 30% 20%, #fdfcfa 0%, #f4f0e8 45%, #e9e2d4 100%);
+  .scene-sea  { background-image: url('ocean.jpg'); }
+  .scene-sand { background-image: url('sand.jpg'); opacity: 0; }
+
+  body.dark .scene-layer { filter: brightness(0.5) saturate(0.9); }
+
+  /* legibility wash behind body copy as the sand section comes in */
+  .content-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: var(--bg);
+    opacity: 0;
+    pointer-events: none;
   }
 
-  body.dark #marble.no-webgl {
-    background: radial-gradient(ellipse at 30% 20%, #17150f 0%, #100e0c 45%, #070605 100%);
+  /* soft, theme-matched patch behind the hero headline — keeps the photo
+     vivid at the edges while guaranteeing contrast where the type sits */
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse 68% 72% at 50% 52%, var(--bg) 0%, transparent 75%);
+    opacity: 0.72;
+    transition: opacity 700ms var(--ease), background 700ms var(--ease);
   }
 
   /* film grain */
@@ -154,43 +176,6 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* ─────────── Custom cursor ─────────── */
-  .cur-dot, .cur-ring {
-    position: fixed;
-    top: 0; left: 0;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 190;
-    mix-blend-mode: multiply;
-  }
-
-  body.dark .cur-dot, body.dark .cur-ring { mix-blend-mode: screen; }
-
-  .cur-dot {
-    width: 6px; height: 6px;
-    background: var(--gold-deep);
-    margin: -3px 0 0 -3px;
-  }
-
-  .cur-ring {
-    width: 38px; height: 38px;
-    border: 1px solid color-mix(in srgb, var(--gold) 60%, transparent);
-    margin: -19px 0 0 -19px;
-    transition: width 300ms var(--ease), height 300ms var(--ease),
-                margin 300ms var(--ease), background 300ms var(--ease),
-                border-color 300ms var(--ease);
-  }
-
-  .cur-ring.grow {
-    width: 74px; height: 74px;
-    margin: -37px 0 0 -37px;
-    background: rgba(169,130,63,0.09);
-    border-color: rgba(169,130,63,0.3);
-  }
-
-  @media (hover: none), (pointer: coarse) {
-    .cur-dot, .cur-ring { display: none; }
-  }
 
   /* ─────────── Theme toggle ─────────── */
   .theme-btn {
@@ -277,17 +262,22 @@
 
   .hero-social a:hover { color: var(--gold); transform: translateY(-2px); }
 
-  /* photo with marble ring + shine sweep */
+  /* photo styled like a ship's porthole — quiet, nautical, no gold/sheen */
   .portrait {
     position: relative;
-    width: 210px;
-    height: 210px;
+    width: 190px;
+    height: 190px;
+    flex-shrink: 0;
     border-radius: 50%;
-    margin-bottom: 36px;
-    padding: 6px;
-    background: conic-gradient(from 140deg, #e6d3a8, var(--gold), #f3e6c8, var(--gold-deep), #e6d3a8);
-    box-shadow: 0 26px 60px rgba(120,95,45,0.22);
+    padding: 7px;
+    background: linear-gradient(155deg, rgba(255,255,255,0.95), rgba(186,212,216,0.55) 45%, rgba(48,86,98,0.65) 100%);
+    box-shadow: 0 22px 48px rgba(8,35,48,0.26), inset 0 0 0 1px rgba(255,255,255,0.5);
     overflow: hidden;
+  }
+
+  body.dark .portrait {
+    background: linear-gradient(155deg, rgba(255,255,255,0.32), rgba(120,150,160,0.32) 45%, rgba(14,26,34,0.7) 100%);
+    box-shadow: 0 22px 48px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(255,255,255,0.12);
   }
 
   .portrait img {
@@ -296,28 +286,16 @@
     border-radius: 50%;
     object-fit: cover;
     display: block;
-    position: relative;
-    z-index: 1;
   }
 
-  .portrait::after {
-    content: '';
-    position: absolute;
-    top: -60%;
-    left: -120%;
-    width: 60%;
-    height: 220%;
-    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.75), transparent);
-    transform: rotate(18deg);
-    z-index: 2;
-    animation: sheen 6.5s ease-in-out 1.6s infinite;
+  .hero-main {
+    display: flex;
+    align-items: center;
+    gap: 52px;
+    margin-bottom: 44px;
   }
 
-  @keyframes sheen {
-    0%   { left: -120%; }
-    38%  { left: 150%; }
-    100% { left: 150%; }
-  }
+  .hero-copy { text-align: left; max-width: 560px; }
 
   .hero-eyebrow {
     font-size: 11px;
@@ -326,6 +304,7 @@
     text-transform: uppercase;
     color: var(--gold);
     margin-bottom: 20px;
+    text-shadow: 0 1px 16px var(--bg), 0 1px 3px var(--bg);
   }
 
   .hero-name {
@@ -335,6 +314,7 @@
     letter-spacing: -1.5px;
     line-height: 1;
     margin-bottom: 26px;
+    text-shadow: 0 2px 28px var(--bg), 0 1px 4px var(--bg);
   }
 
   /* split-char reveal */
@@ -362,15 +342,15 @@
     color: var(--muted);
     line-height: 1.8;
     max-width: 500px;
-    margin-bottom: 46px;
+    margin-bottom: 34px;
+    text-shadow: 0 1px 14px var(--bg), 0 1px 3px var(--bg);
   }
 
   .hero-pills {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 14px;
-    margin-bottom: 74px;
   }
 
   .mg {
@@ -414,6 +394,28 @@
 
   .mg.primary::before { background: var(--gold-deep); }
 
+  /* hero pills sit on the ocean photo, not the paper bg — sea accent instead of gold */
+  .hero-pills .mg {
+    border-color: rgba(255,255,255,0.55);
+    background: rgba(255,255,255,0.16);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  body.dark .hero-pills .mg { background: rgba(10,20,24,0.32); border-color: rgba(255,255,255,0.25); }
+
+  .hero-pills .mg::before { background: var(--sea); }
+  .hero-pills .mg:hover,
+  body.dark .hero-pills .mg:hover { border-color: var(--sea); }
+
+  .hero-pills .mg.primary,
+  body.dark .hero-pills .mg.primary {
+    background: var(--sea);
+    border-color: var(--sea);
+  }
+
+  .hero-pills .mg.primary::before { background: var(--sea-deep); }
+
   .hero-scroll {
     display: flex;
     flex-direction: column;
@@ -454,8 +456,11 @@
     100% { top: 100%; }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     .hero-social { position: static; margin-bottom: 34px; }
+    .hero-main { flex-direction: column; gap: 28px; text-align: center; }
+    .hero-copy { text-align: center; }
+    .hero-pills { justify-content: center; }
     .portrait { width: 165px; height: 165px; }
     #hero { padding: 60px 20px 40px; }
   }
@@ -464,14 +469,12 @@
   #app {
     position: relative;
     z-index: 2;
-    height: 100svh;
-    display: flex;
-    flex-direction: column;
   }
 
   header.topbar {
-    flex-shrink: 0;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 10;
     background: var(--header-glass);
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
@@ -480,7 +483,7 @@
 
   .social-corner {
     position: absolute;
-    top: 24px;
+    top: 13px;
     right: 30px;
     display: flex;
     gap: 16px;
@@ -495,34 +498,44 @@
   .social-corner a:hover { color: var(--gold); transform: translateY(-2px); }
 
   .brand {
-    text-align: center;
-    padding: 24px 96px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 96px;
   }
 
   .brand-photo {
-    width: 54px;
-    height: 54px;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
     border-radius: 50%;
     object-fit: cover;
     padding: 2px;
-    background: conic-gradient(from 140deg, #e6d3a8, var(--gold), #f3e6c8, var(--gold-deep), #e6d3a8);
-    margin-bottom: 11px;
+    background: linear-gradient(155deg, rgba(255,255,255,0.95), rgba(186,212,216,0.55) 45%, rgba(48,86,98,0.65) 100%);
   }
+
+  body.dark .brand-photo {
+    background: linear-gradient(155deg, rgba(255,255,255,0.32), rgba(120,150,160,0.32) 45%, rgba(14,26,34,0.7) 100%);
+  }
+
+  .brand-text { text-align: left; }
 
   .brand-name {
     font-family: var(--serif);
-    font-size: 25px;
+    font-size: 17px;
     font-weight: 600;
-    letter-spacing: 0.6px;
+    letter-spacing: 0.4px;
+    line-height: 1.2;
   }
 
   .brand-title {
-    font-size: 9.5px;
+    font-size: 8.5px;
     font-weight: 600;
-    letter-spacing: 3.4px;
+    letter-spacing: 2.6px;
     text-transform: uppercase;
     color: var(--gold);
-    margin-top: 6px;
+    margin-top: 3px;
   }
 
   /* nav with sliding indicator */
@@ -531,7 +544,7 @@
     display: flex;
     justify-content: center;
     gap: 34px;
-    padding: 15px 24px;
+    padding: 10px 24px;
     border-top: 1px solid var(--line);
   }
 
@@ -568,32 +581,21 @@
 
   @media (max-width: 600px) {
     .social-corner { position: static; justify-content: center; padding: 14px 0 0; }
-    .brand { padding: 8px 24px 14px; }
+    .brand { padding: 8px 24px; }
     .subnav { gap: 14px 18px; flex-wrap: wrap; }
     .home-link { padding-right: 14px; margin-right: 0; }
     #navInk { display: none; }
   }
 
   /* ─────────── Panels ─────────── */
-  .viewport {
-    flex: 1;
-    min-height: 0;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .track {
-    display: flex;
-    height: 100%;
-    transition: transform 780ms var(--ease);
-  }
+  .viewport { position: relative; }
 
   .panel {
-    height: 100%;
-    overflow-y: auto;
-    flex-shrink: 0;
-    -webkit-overflow-scrolling: touch;
+    scroll-margin-top: var(--header-h, 92px);
+    border-top: 1px solid var(--line);
   }
+
+  .panel:first-child { border-top: none; }
 
   .panel-inner {
     max-width: 780px;
@@ -977,17 +979,19 @@
       transition-duration: 0.001ms !important;
     }
   }
+
+  button, .hero-scroll, [role="button"] { cursor: pointer; }
 </style>
 </head>
 <body class="locked">
 
-<canvas id="marble"></canvas>
+<div class="scene-layer scene-sea"></div>
+<div class="scene-layer scene-sand"></div>
+<div class="content-scrim"></div>
 <div class="vignette"></div>
 <div class="grain"></div>
 
 <div id="progress"></div>
-<div class="cur-ring" id="curRing"></div>
-<div class="cur-dot" id="curDot"></div>
 
 <div id="loader">
   <div class="loader-mark">BLU</div>
@@ -996,45 +1000,50 @@
 </div>
 
 <section id="hero">
+  <div class="hero-scrim"></div>
   <div class="hero-social">
-    <a href="https://github.com/blu-chl" target="_blank" rel="noopener" aria-label="GitHub" data-cursor>
+    <a href="https://github.com/blu-chl" target="_blank" rel="noopener" aria-label="GitHub">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
     </a>
-    <a href="https://linkedin.com/in/blu-ingeco" target="_blank" rel="noopener" aria-label="LinkedIn" data-cursor>
+    <a href="https://linkedin.com/in/blu-ingeco" target="_blank" rel="noopener" aria-label="LinkedIn">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
     </a>
-    <a href="mailto:benjamin.lara.urra@gmail.com" aria-label="Email" data-cursor>
+    <a href="mailto:benjamin.lara.urra@gmail.com" aria-label="Email">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
     </a>
-    <a href="tel:+56984281982" aria-label="Teléfono" data-cursor>
+    <a href="tel:+56984281982" aria-label="Teléfono">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
     </a>
-    <a href="CV.pdf" target="_blank" rel="noopener" aria-label="Ver CV" data-cursor>
+    <a href="CV.pdf" target="_blank" rel="noopener" aria-label="Ver CV">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h2"/></svg>
     </a>
-    <button class="theme-btn" data-theme-toggle aria-label="Cambiar tema" data-cursor>
+    <button class="theme-btn" data-theme-toggle aria-label="Cambiar tema">
       <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
     </button>
   </div>
 
-  <div class="portrait rv">
-    <img src="foto.jpg" alt="Benjamin Lara Urra" onerror="this.parentElement.style.display='none'">
+  <div class="hero-main">
+    <div class="portrait rv">
+      <img src="foto.jpg" alt="Benjamin Lara Urra" onerror="this.parentElement.style.display='none'">
+    </div>
+
+    <div class="hero-copy">
+      <p class="hero-eyebrow rv">Ingeniero Comercial</p>
+      <h1 class="hero-name" id="heroName">Benjamin Lara Urra</h1>
+      <div class="hero-rule" id="heroRule"></div>
+      <p class="hero-intro rv">Combino análisis financiero, control de gestión y desarrollo de software para construir herramientas que resuelven problemas reales — con precisión analítica y ejecución técnica.</p>
+
+      <div class="hero-pills rv">
+        <a class="mg" href="#sobre"><span>Sobre mí</span></a>
+        <a class="mg" href="#proyectos"><span>Proyectos</span></a>
+        <a class="mg" href="#stack"><span>Stack</span></a>
+        <a class="mg" href="CV.pdf" target="_blank" rel="noopener"><span>Ver CV ↗</span></a>
+      </div>
+    </div>
   </div>
 
-  <p class="hero-eyebrow rv">Ingeniero Comercial</p>
-  <h1 class="hero-name" id="heroName">Benjamin Lara Urra</h1>
-  <div class="hero-rule" id="heroRule"></div>
-  <p class="hero-intro rv">Combino análisis financiero, control de gestión y desarrollo de software para construir herramientas que resuelven problemas reales — con precisión analítica y ejecución técnica.</p>
-
-  <div class="hero-pills rv">
-    <a class="mg primary" href="#sobre" data-index="0" data-cursor><span>Sobre mí</span></a>
-    <a class="mg" href="#proyectos" data-index="1" data-cursor><span>Proyectos</span></a>
-    <a class="mg" href="#stack" data-index="2" data-cursor><span>Stack</span></a>
-    <a class="mg" href="CV.pdf" target="_blank" rel="noopener" data-cursor><span>Ver CV ↗</span></a>
-  </div>
-
-  <div class="hero-scroll rv" id="heroScroll" data-cursor>
+  <div class="hero-scroll rv" id="heroScroll">
     <span>Explorar</span>
     <i></i>
   </div>
@@ -1043,22 +1052,22 @@
 <div id="app">
   <header class="topbar">
     <div class="social-corner">
-      <a href="https://github.com/blu-chl" target="_blank" rel="noopener" aria-label="GitHub" data-cursor>
+      <a href="https://github.com/blu-chl" target="_blank" rel="noopener" aria-label="GitHub">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       </a>
-      <a href="https://linkedin.com/in/blu-ingeco" target="_blank" rel="noopener" aria-label="LinkedIn" data-cursor>
+      <a href="https://linkedin.com/in/blu-ingeco" target="_blank" rel="noopener" aria-label="LinkedIn">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
-      <a href="mailto:benjamin.lara.urra@gmail.com" aria-label="Email" data-cursor>
+      <a href="mailto:benjamin.lara.urra@gmail.com" aria-label="Email">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
       </a>
-      <a href="tel:+56984281982" aria-label="Teléfono" data-cursor>
+      <a href="tel:+56984281982" aria-label="Teléfono">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       </a>
-      <a href="CV.pdf" target="_blank" rel="noopener" aria-label="Ver CV" data-cursor>
+      <a href="CV.pdf" target="_blank" rel="noopener" aria-label="Ver CV">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h2"/></svg>
       </a>
-      <button class="theme-btn" data-theme-toggle aria-label="Cambiar tema" data-cursor>
+      <button class="theme-btn" data-theme-toggle aria-label="Cambiar tema">
         <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
@@ -1066,491 +1075,274 @@
 
     <div class="brand">
       <img class="brand-photo" src="foto.jpg" alt="Benjamin Lara Urra" onerror="this.remove()">
-      <p class="brand-name">Benjamin Lara Urra</p>
-      <p class="brand-title">Ingeniero Comercial</p>
+      <div class="brand-text">
+        <p class="brand-name">Benjamin Lara Urra</p>
+        <p class="brand-title">Ingeniero Comercial</p>
+      </div>
     </div>
 
     <nav class="subnav" id="nav">
-      <a href="#hero" class="home-link" id="navHome" data-cursor>Inicio</a>
-      <a href="#sobre" class="panel-link active" data-index="0" data-cursor>Sobre mí</a>
-      <a href="#proyectos" class="panel-link" data-index="1" data-cursor>Proyectos</a>
-      <a href="#stack" class="panel-link" data-index="2" data-cursor>Stack</a>
+      <a href="#hero" class="home-link" id="navHome">Inicio</a>
+      <a href="#sobre" class="panel-link active">Sobre mí</a>
+      <a href="#proyectos" class="panel-link">Proyectos</a>
+      <a href="#stack" class="panel-link">Stack</a>
       <i id="navInk"></i>
     </nav>
   </header>
 
-  <div class="viewport">
-    <div class="track" id="track">
+  <div class="viewport" id="track">
 
-      <!-- ── SOBRE MÍ ── -->
-      <section class="panel" id="sobre">
-        <div class="panel-inner">
-          <p class="section-label rv">Sobre mí</p>
-          <div class="section-rule rv"></div>
-          <p class="lead rv">Ingeniero Comercial bilingüe (Business English C1) con formación sólida en análisis financiero, control de gestión y evaluación de proyectos. Experiencia en conciliaciones contables, control presupuestario y optimización de procesos operativos. Manejo Python, SQL, Tableau y Power BI para automatizar reportes, y construyo herramientas digitales que combinan gestión con desarrollo de software.</p>
+    <!-- ── SOBRE MÍ ── -->
+    <section class="panel" id="sobre">
+      <div class="panel-inner">
+        <p class="section-label rv">Sobre mí</p>
+        <div class="section-rule rv"></div>
+        <p class="lead rv">Ingeniero Comercial bilingüe (Business English C1) con formación sólida en análisis financiero, control de gestión y evaluación de proyectos. Experiencia en conciliaciones contables, control presupuestario y optimización de procesos operativos. Manejo Python, SQL, Tableau y Power BI para automatizar reportes, y construyo herramientas digitales que combinan gestión con desarrollo de software.</p>
 
-          <p class="sub-label rv">¿Por qué trabajar conmigo?</p>
-          <ul class="checklist">
-            <li class="rv"><span class="check">✓</span> Orientado a resultados y trabajo bajo presión</li>
-            <li class="rv"><span class="check">✓</span> Bilingüe — Inglés C1 (certificado)</li>
-            <li class="rv"><span class="check">✓</span> Experiencia internacional en equipos multiculturales</li>
-            <li class="rv"><span class="check">✓</span> Manejo de datos: Python, SQL, Power BI, Tableau</li>
-            <li class="rv"><span class="check">✓</span> Control financiero real: conciliaciones y presupuesto</li>
-            <li class="rv"><span class="check">✓</span> Autodidacta en desarrollo de software</li>
-          </ul>
+        <p class="sub-label rv">¿Por qué trabajar conmigo?</p>
+        <ul class="checklist">
+          <li class="rv"><span class="check">✓</span> Orientado a resultados y trabajo bajo presión</li>
+          <li class="rv"><span class="check">✓</span> Bilingüe — Inglés C1 (certificado)</li>
+          <li class="rv"><span class="check">✓</span> Experiencia internacional en equipos multiculturales</li>
+          <li class="rv"><span class="check">✓</span> Manejo de datos: Python, SQL, Power BI, Tableau</li>
+          <li class="rv"><span class="check">✓</span> Control financiero real: conciliaciones y presupuesto</li>
+          <li class="rv"><span class="check">✓</span> Autodidacta en desarrollo de software</li>
+        </ul>
 
-          <div class="about-columns">
-            <div>
-              <p class="sub-label rv">Experiencia</p>
-              <ul class="timeline">
-                <li class="rv">
-                  <span class="tl-period">Ago. 2024 — Nov. 2024</span>
-                  <span class="tl-role">Practicante Finanzas, RRHH y Contabilidad · Agrifor, Temuco</span>
-                  <p class="tl-desc">Rediseñé en Excel el sistema de planificación de turnos para 150 personas (100% de mejora en cobertura) y apoyé la conciliación y cierre mensual del área de Finanzas.</p>
-                </li>
-                <li class="rv">
-                  <span class="tl-period">Dic. 2022 — Mar. 2023</span>
-                  <span class="tl-role">Practicante Gestión Comercial y Finanzas · Agrotop, Padre Las Casas</span>
-                  <p class="tl-desc">Soporte en cierre de 2 a 3 contratos agrícolas diarios sobre $1.000.000 c/u y control de flujos de pago a una cartera amplia de proveedores de La Araucanía.</p>
-                </li>
-                <li class="rv">
-                  <span class="tl-period">Dic. 2023 — Mar. 2024</span>
-                  <span class="tl-role">Work &amp; Travel — Operaciones y Calidad · The Charleston Place (5★), EE.UU.</span>
-                  <p class="tl-desc">Gestión logística en hotel de categoría cinco estrellas bajo estándares internacionales de calidad, coordinando equipos multiculturales en inglés.</p>
-                </li>
-                <li class="rv">
-                  <span class="tl-period">Dic. 2024 — Mar. 2025</span>
-                  <span class="tl-role">Work &amp; Travel — Gestión Operativa · Coast Pizza, Alaska, EE.UU.</span>
-                  <p class="tl-desc">Gestión de producción en entorno de alta demanda, con comunicación exclusivamente en inglés en un equipo multicultural.</p>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p class="sub-label rv">Educación</p>
-              <ul class="timeline">
-                <li class="rv">
-                  <span class="tl-period">2020 — 2025</span>
-                  <span class="tl-role">Ingeniería Comercial · Universidad Mayor, Temuco</span>
-                  <p class="tl-desc">Diploma de Alto Honor Académico — Promedio 6.2/7.0. Proyectos de análisis financiero, evaluación de inversiones y valoración de activos.</p>
-                </li>
-                <li class="rv">
-                  <span class="tl-period">Sep. 2023 — Ene. 2024</span>
-                  <span class="tl-role">Formación en el Extranjero · Hogeschool Vives, Bélgica</span>
-                  <p class="tl-desc">Cinco meses de experiencia académica 100% internacional — cursos en inglés de Marketing Internacional, Economía Social, Decisiones con IA y Finanzas Aplicadas.</p>
-                </li>
-              </ul>
-              <p class="sub-label rv" style="margin-top: 42px;">Certificaciones</p>
-              <div class="stack-row">
-                <span class="stack-chip rv">Python Intermedio</span>
-                <span class="stack-chip rv">Power BI Intermedio</span>
-                <span class="stack-chip rv">Excel Avanzado</span>
-                <span class="stack-chip rv">Inglés C1 Avanzado</span>
-                <span class="stack-chip rv">Licencia Clase B</span>
-              </div>
+        <div class="about-columns">
+          <div>
+            <p class="sub-label rv">Experiencia</p>
+            <ul class="timeline">
+              <li class="rv">
+                <span class="tl-period">Ago. 2024 — Nov. 2024</span>
+                <span class="tl-role">Practicante Finanzas, RRHH y Contabilidad · Agrifor, Temuco</span>
+                <p class="tl-desc">Rediseñé en Excel el sistema de planificación de turnos para 150 personas (100% de mejora en cobertura) y apoyé la conciliación y cierre mensual del área de Finanzas.</p>
+              </li>
+              <li class="rv">
+                <span class="tl-period">Dic. 2022 — Mar. 2023</span>
+                <span class="tl-role">Practicante Gestión Comercial y Finanzas · Agrotop, Padre Las Casas</span>
+                <p class="tl-desc">Soporte en cierre de 2 a 3 contratos agrícolas diarios sobre $1.000.000 c/u y control de flujos de pago a una cartera amplia de proveedores de La Araucanía.</p>
+              </li>
+              <li class="rv">
+                <span class="tl-period">Dic. 2023 — Mar. 2024</span>
+                <span class="tl-role">Work &amp; Travel — Operaciones y Calidad · The Charleston Place (5★), EE.UU.</span>
+                <p class="tl-desc">Gestión logística en hotel de categoría cinco estrellas bajo estándares internacionales de calidad, coordinando equipos multiculturales en inglés.</p>
+              </li>
+              <li class="rv">
+                <span class="tl-period">Dic. 2024 — Mar. 2025</span>
+                <span class="tl-role">Work &amp; Travel — Gestión Operativa · Coast Pizza, Alaska, EE.UU.</span>
+                <p class="tl-desc">Gestión de producción en entorno de alta demanda, con comunicación exclusivamente en inglés en un equipo multicultural.</p>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p class="sub-label rv">Educación</p>
+            <ul class="timeline">
+              <li class="rv">
+                <span class="tl-period">2020 — 2025</span>
+                <span class="tl-role">Ingeniería Comercial · Universidad Mayor, Temuco</span>
+                <p class="tl-desc">Diploma de Alto Honor Académico — Promedio 6.2/7.0. Proyectos de análisis financiero, evaluación de inversiones y valoración de activos.</p>
+              </li>
+              <li class="rv">
+                <span class="tl-period">Sep. 2023 — Ene. 2024</span>
+                <span class="tl-role">Formación en el Extranjero · Hogeschool Vives, Bélgica</span>
+                <p class="tl-desc">Cinco meses de experiencia académica 100% internacional — cursos en inglés de Marketing Internacional, Economía Social, Decisiones con IA y Finanzas Aplicadas.</p>
+              </li>
+            </ul>
+            <p class="sub-label rv" style="margin-top: 42px;">Certificaciones</p>
+            <div class="stack-row">
+              <span class="stack-chip rv">Python Intermedio</span>
+              <span class="stack-chip rv">Power BI Intermedio</span>
+              <span class="stack-chip rv">Excel Avanzado</span>
+              <span class="stack-chip rv">Inglés C1 Avanzado</span>
+              <span class="stack-chip rv">Licencia Clase B</span>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ── PROYECTOS ── -->
-      <section class="panel" id="proyectos">
-        <div class="panel-inner">
-          <p class="section-label rv">Proyectos</p>
-          <div class="section-rule rv"></div>
+    <!-- ── PROYECTOS ── -->
+    <section class="panel" id="proyectos">
+      <div class="panel-inner">
+        <p class="section-label rv">Proyectos</p>
+        <div class="section-rule rv"></div>
 
-          <div class="filter-row rv" id="filters">
-            <button class="filter-chip active" data-filter="all" data-cursor>Todos</button>
-            <button class="filter-chip" data-filter="web" data-cursor>Web</button>
-            <button class="filter-chip" data-filter="db" data-cursor>Base de Datos</button>
-            <button class="filter-chip" data-filter="python" data-cursor>Python</button>
-            <button class="filter-chip" data-filter="finanzas" data-cursor>Finanzas</button>
-          </div>
-
-          <p class="count-line rv"><span id="projCount">9</span> proyectos</p>
-
-          <div class="project-list" id="projectList">
-
-            <a class="project-row rv" data-cat="web db" href="https://blu-chl.github.io/deportes-temuco/" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Deportes Temuco</h3><span class="idx">01</span></div>
-              <p class="project-desc">Plataforma de gestión de datos para un club de fútbol. Registra partidos, estadísticas de jugadores, goles por período y seguimiento de la temporada.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231a1917" alt="" onerror="this.remove()">PostgreSQL</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="web db" href="https://blu-chl.github.io/tynt/" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Tynt</h3><span class="idx">02</span></div>
-              <p class="project-desc">Editor de libros con escritura por capítulos, modo foco y autenticación de usuarios. Stack moderno con Vite y Supabase.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231a1917" alt="" onerror="this.remove()">React</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231a1917" alt="" onerror="this.remove()">Vite</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="web" href="https://blu-chl.github.io/diario/" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Diario Personal</h3><span class="idx">03</span></div>
-              <p class="project-desc">Diario multi-usuario con contraseñas, fotos en entradas, 10 paletas de color y 6 tipografías. Un solo archivo HTML, sin servidor ni dependencias.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">Vanilla JS</span>
-                <span class="tech-chip">LocalStorage</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="web" href="https://blu-chl.github.io/mi-semana/" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Mi Semana</h3><span class="idx">04</span></div>
-              <p class="project-desc">App de rutina semanal con seguimiento de hábitos, progreso visual y perfiles de usuario. Desplegada en GitHub Pages.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231a1917" alt="" onerror="this.remove()">GitHub Pages</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="web" href="https://blu-chl.github.io/splitcuenta/" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>SplitCuenta</h3><span class="idx">05</span></div>
-              <p class="project-desc">App para dividir cuentas en grupo. Escanea la boleta con OCR, asigna ítems por persona, agrega propina y comparte el desglose con un link único.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Next.js</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind</span>
-                <span class="tech-chip">Tesseract.js (OCR)</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="web db finanzas" href="https://pasteleria-kit.vercel.app" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Kit Financiero para Pastelerías</h3><span class="idx">06</span></div>
-              <p class="project-desc">App de gestión financiera para negocios de pastelería. Control de ingresos, gastos, productos y reportes para la toma de decisiones.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Next.js</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="web finanzas" href="https://blu-chl.github.io/control-gastos/" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Control de Gastos</h3><span class="idx">07</span></div>
-              <p class="project-desc">App de finanzas personales para registrar ingresos y gastos, ver distribución por categorías con gráficos y exportar resúmenes a Excel.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Chart.js</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231a1917" alt="" onerror="this.remove()">Excel Export</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="python finanzas" href="https://github.com/blu-chl/reporte-automatico" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Reporte Automático <span class="beta-flag">Beta</span></h3><span class="idx">08</span></div>
-              <p class="project-desc">Script Python que convierte cualquier Excel en un reporte PDF profesional con resumen estadístico, tablas formateadas y soporte multi-hoja.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231a1917" alt="" onerror="this.remove()">Python</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231a1917" alt="" onerror="this.remove()">Pandas</span>
-                <span class="tech-chip">ReportLab</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231a1917" alt="" onerror="this.remove()">Excel → PDF</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-            <a class="project-row rv" data-cat="python" href="https://blu-chl.github.io/cyclistic-bikeshare/" target="_blank" rel="noopener" data-cursor>
-              <div class="project-head"><h3>Cyclistic Bike-Share</h3><span class="idx">09</span></div>
-              <p class="project-desc">Case study de analítica de datos (Google Data Analytics Certificate): limpieza y análisis de 4,2M de viajes reales de bike-share para comparar cómo usan el servicio los socios anuales vs. los ciclistas ocasionales, con recomendaciones de marketing.</p>
-              <div class="tech-tags">
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231a1917" alt="" onerror="this.remove()">Python</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231a1917" alt="" onerror="this.remove()">Pandas</span>
-                <span class="tech-chip">Matplotlib</span>
-                <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231a1917" alt="" onerror="this.remove()">GitHub Pages</span>
-              </div>
-              <span class="go">Ver proyecto →</span>
-            </a>
-
-          </div>
+        <div class="filter-row rv" id="filters">
+          <button class="filter-chip active" data-filter="all">Todos</button>
+          <button class="filter-chip" data-filter="web">Web</button>
+          <button class="filter-chip" data-filter="db">Base de Datos</button>
+          <button class="filter-chip" data-filter="python">Python</button>
+          <button class="filter-chip" data-filter="finanzas">Finanzas</button>
         </div>
-      </section>
 
-      <!-- ── STACK ── -->
-      <section class="panel" id="stack">
-        <div class="panel-inner">
-          <p class="section-label rv">Stack</p>
-          <div class="section-rule rv"></div>
+        <p class="count-line rv"><span id="projCount">9</span> proyectos</p>
 
-          <p class="sub-label rv">Finanzas &amp; Datos</p>
-          <div class="stack-row" style="margin-bottom: 42px;">
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231a1917" alt="" onerror="this.remove()">Excel Avanzado</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/powerbi.svg?color=%231a1917" alt="" onerror="this.remove()">Power BI</span>
-            <span class="stack-chip rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>SQL</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/tableau.svg?color=%231a1917" alt="" onerror="this.remove()">Tableau</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231a1917" alt="" onerror="this.remove()">Python</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231a1917" alt="" onerror="this.remove()">Pandas</span>
-          </div>
+        <div class="project-list" id="projectList">
 
-          <p class="sub-label rv">Desarrollo</p>
-          <div class="stack-row">
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231a1917" alt="" onerror="this.remove()">React</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Next.js</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231a1917" alt="" onerror="this.remove()">Vite</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231a1917" alt="" onerror="this.remove()">PostgreSQL</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind CSS</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Chart.js</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/git.svg?color=%231a1917" alt="" onerror="this.remove()">Git</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/vercel.svg?color=%231a1917" alt="" onerror="this.remove()">Vercel</span>
-            <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231a1917" alt="" onerror="this.remove()">GitHub Pages</span>
-          </div>
-
-          <div class="marquee">
-            <div class="marquee-track">
-              <span>Análisis Financiero</span><span>Control de Gestión</span><span>Automatización</span><span>Evaluación de Proyectos</span><span>Business Intelligence</span><span>Desarrollo Web</span>
-              <span>Análisis Financiero</span><span>Control de Gestión</span><span>Automatización</span><span>Evaluación de Proyectos</span><span>Business Intelligence</span><span>Desarrollo Web</span>
+          <a class="project-row rv" data-cat="web db" href="https://blu-chl.github.io/deportes-temuco/" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Deportes Temuco</h3><span class="idx">01</span></div>
+            <p class="project-desc">Plataforma de gestión de datos para un club de fútbol. Registra partidos, estadísticas de jugadores, goles por período y seguimiento de la temporada.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231a1917" alt="" onerror="this.remove()">PostgreSQL</span>
             </div>
-          </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
 
-          <footer>
-            <span>¿Quieres ver el repo de este portafolio? <a href="https://github.com/blu-chl/blu-chl.github.io" target="_blank" rel="noopener" data-cursor>Código aquí</a></span>
-            <span>© 2026 Benjamin Lara Urra · Todos los derechos reservados.</span>
-          </footer>
+          <a class="project-row rv" data-cat="web db" href="https://blu-chl.github.io/tynt/" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Tynt</h3><span class="idx">02</span></div>
+            <p class="project-desc">Editor de libros con escritura por capítulos, modo foco y autenticación de usuarios. Stack moderno con Vite y Supabase.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231a1917" alt="" onerror="this.remove()">React</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231a1917" alt="" onerror="this.remove()">Vite</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
+          <a class="project-row rv" data-cat="web" href="https://blu-chl.github.io/diario/" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Diario Personal</h3><span class="idx">03</span></div>
+            <p class="project-desc">Diario multi-usuario con contraseñas, fotos en entradas, 10 paletas de color y 6 tipografías. Un solo archivo HTML, sin servidor ni dependencias.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">Vanilla JS</span>
+              <span class="tech-chip">LocalStorage</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
+          <a class="project-row rv" data-cat="web" href="https://blu-chl.github.io/mi-semana/" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Mi Semana</h3><span class="idx">04</span></div>
+            <p class="project-desc">App de rutina semanal con seguimiento de hábitos, progreso visual y perfiles de usuario. Desplegada en GitHub Pages.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231a1917" alt="" onerror="this.remove()">GitHub Pages</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
+          <a class="project-row rv" data-cat="web" href="https://blu-chl.github.io/splitcuenta/" target="_blank" rel="noopener">
+            <div class="project-head"><h3>SplitCuenta</h3><span class="idx">05</span></div>
+            <p class="project-desc">App para dividir cuentas en grupo. Escanea la boleta con OCR, asigna ítems por persona, agrega propina y comparte el desglose con un link único.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Next.js</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind</span>
+              <span class="tech-chip">Tesseract.js (OCR)</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
+          <a class="project-row rv" data-cat="web db finanzas" href="https://pasteleria-kit.vercel.app" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Kit Financiero para Pastelerías</h3><span class="idx">06</span></div>
+            <p class="project-desc">App de gestión financiera para negocios de pastelería. Control de ingresos, gastos, productos y reportes para la toma de decisiones.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Next.js</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
+          <a class="project-row rv" data-cat="web finanzas" href="https://blu-chl.github.io/control-gastos/" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Control de Gastos</h3><span class="idx">07</span></div>
+            <p class="project-desc">App de finanzas personales para registrar ingresos y gastos, ver distribución por categorías con gráficos y exportar resúmenes a Excel.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Chart.js</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231a1917" alt="" onerror="this.remove()">Excel Export</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
+          <a class="project-row rv" data-cat="python finanzas" href="https://github.com/blu-chl/reporte-automatico" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Reporte Automático <span class="beta-flag">Beta</span></h3><span class="idx">08</span></div>
+            <p class="project-desc">Script Python que convierte cualquier Excel en un reporte PDF profesional con resumen estadístico, tablas formateadas y soporte multi-hoja.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231a1917" alt="" onerror="this.remove()">Python</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231a1917" alt="" onerror="this.remove()">Pandas</span>
+              <span class="tech-chip">ReportLab</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231a1917" alt="" onerror="this.remove()">Excel → PDF</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
+          <a class="project-row rv" data-cat="python" href="https://blu-chl.github.io/cyclistic-bikeshare/" target="_blank" rel="noopener">
+            <div class="project-head"><h3>Cyclistic Bike-Share</h3><span class="idx">09</span></div>
+            <p class="project-desc">Case study de analítica de datos (Google Data Analytics Certificate): limpieza y análisis de 4,2M de viajes reales de bike-share para comparar cómo usan el servicio los socios anuales vs. los ciclistas ocasionales, con recomendaciones de marketing.</p>
+            <div class="tech-tags">
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231a1917" alt="" onerror="this.remove()">Python</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231a1917" alt="" onerror="this.remove()">Pandas</span>
+              <span class="tech-chip">Matplotlib</span>
+              <span class="tech-chip"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231a1917" alt="" onerror="this.remove()">GitHub Pages</span>
+            </div>
+            <span class="go">Ver proyecto →</span>
+          </a>
+
         </div>
-      </section>
+      </div>
+    </section>
 
-    </div>
+    <!-- ── STACK ── -->
+    <section class="panel" id="stack">
+      <div class="panel-inner">
+        <p class="section-label rv">Stack</p>
+        <div class="section-rule rv"></div>
+
+        <p class="sub-label rv">Finanzas &amp; Datos</p>
+        <div class="stack-row" style="margin-bottom: 42px;">
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/microsoftexcel.svg?color=%231a1917" alt="" onerror="this.remove()">Excel Avanzado</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/powerbi.svg?color=%231a1917" alt="" onerror="this.remove()">Power BI</span>
+          <span class="stack-chip rv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>SQL</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/tableau.svg?color=%231a1917" alt="" onerror="this.remove()">Tableau</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/python.svg?color=%231a1917" alt="" onerror="this.remove()">Python</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/pandas.svg?color=%231a1917" alt="" onerror="this.remove()">Pandas</span>
+        </div>
+
+        <p class="sub-label rv">Desarrollo</p>
+        <div class="stack-row">
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/html5.svg?color=%231a1917" alt="" onerror="this.remove()">HTML</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/javascript.svg?color=%231a1917" alt="" onerror="this.remove()">JavaScript</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/typescript.svg?color=%231a1917" alt="" onerror="this.remove()">TypeScript</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/react.svg?color=%231a1917" alt="" onerror="this.remove()">React</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/nextdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Next.js</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/vite.svg?color=%231a1917" alt="" onerror="this.remove()">Vite</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/postgresql.svg?color=%231a1917" alt="" onerror="this.remove()">PostgreSQL</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/supabase.svg?color=%231a1917" alt="" onerror="this.remove()">Supabase</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/tailwindcss.svg?color=%231a1917" alt="" onerror="this.remove()">Tailwind CSS</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/chartdotjs.svg?color=%231a1917" alt="" onerror="this.remove()">Chart.js</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/git.svg?color=%231a1917" alt="" onerror="this.remove()">Git</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/vercel.svg?color=%231a1917" alt="" onerror="this.remove()">Vercel</span>
+          <span class="stack-chip rv"><img src="https://api.iconify.design/simple-icons/githubpages.svg?color=%231a1917" alt="" onerror="this.remove()">GitHub Pages</span>
+        </div>
+
+        <div class="marquee">
+          <div class="marquee-track">
+            <span>Análisis Financiero</span><span>Control de Gestión</span><span>Automatización</span><span>Evaluación de Proyectos</span><span>Business Intelligence</span><span>Desarrollo Web</span>
+            <span>Análisis Financiero</span><span>Control de Gestión</span><span>Automatización</span><span>Evaluación de Proyectos</span><span>Business Intelligence</span><span>Desarrollo Web</span>
+          </div>
+        </div>
+
+        <footer>
+          <span>¿Quieres ver el repo de este portafolio? <a href="https://github.com/blu-chl/blu-chl.github.io" target="_blank" rel="noopener">Código aquí</a></span>
+          <span>© 2026 Benjamin Lara Urra · Todos los derechos reservados.</span>
+        </footer>
+      </div>
+    </section>
+
   </div>
 </div>
 
 <script>
-/* ═══════════════ 1. MARBLE SHADER ═══════════════ */
-(function marbleBG() {
-  const canvas = document.getElementById('marble');
-  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-
-  if (!gl) {
-    canvas.classList.add('no-webgl');
-    return;
-  }
-
-  const vert = `
-    attribute vec2 p;
-    void main() { gl_Position = vec4(p, 0.0, 1.0); }
-  `;
-
-  const frag = `
-    precision highp float;
-    uniform vec2  u_res;
-    uniform float u_time;
-    uniform vec2  u_mouse;
-    uniform float u_dark;   // 0 = Calacatta, 1 = Nero Marquina
-
-    vec2 hash(vec2 p) {
-      p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
-      return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
-    }
-
-    float noise(vec2 p) {
-      const float K1 = 0.366025404;
-      const float K2 = 0.211324865;
-      vec2 i = floor(p + (p.x + p.y) * K1);
-      vec2 a = p - i + (i.x + i.y) * K2;
-      float m = step(a.y, a.x);
-      vec2 o = vec2(m, 1.0 - m);
-      vec2 b = a - o + K2;
-      vec2 c = a - 1.0 + 2.0 * K2;
-      vec3 h = max(0.5 - vec3(dot(a,a), dot(b,b), dot(c,c)), 0.0);
-      vec3 n = h*h*h*h * vec3(dot(a, hash(i)), dot(b, hash(i+o)), dot(c, hash(i+1.0)));
-      return dot(n, vec3(70.0));
-    }
-
-    float fbm(vec2 p) {
-      float v = 0.0;
-      float a = 0.5;
-      mat2 rot = mat2(0.80, 0.60, -0.60, 0.80);
-      for (int i = 0; i < 5; i++) {
-        v += a * noise(p);
-        p = rot * p * 2.02;
-        a *= 0.5;
-      }
-      return v;
-    }
-
-    void main() {
-      vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
-      // large scale = broad, sweeping veins (Calacatta) rather than busy granite
-      uv *= 0.72;
-
-      float t = u_time * 0.028;
-      vec2 mo = u_mouse * 0.12;
-
-      // domain warping — this is what makes it read as real stone
-      vec2 q = vec2(fbm(uv + vec2(0.0, t)),
-                    fbm(uv + vec2(5.2, 1.3) + t * 0.7));
-      vec2 r = vec2(fbm(uv + 3.0 * q + vec2(1.7, 9.2) + 0.15 * t + mo),
-                    fbm(uv + 3.0 * q + vec2(8.3, 2.8) + 0.13 * t));
-      float f = fbm(uv + 2.6 * r);
-
-      // primary veining
-      float vein = abs(sin((uv.x * 1.4 + uv.y * 0.9) * 2.2 + f * 6.5));
-      vein = pow(1.0 - vein, 3.5);
-
-      // fine gold filaments
-      float fil = abs(sin((uv.y * 2.4 - uv.x * 1.6) * 3.4 + f * 9.0));
-      fil = pow(1.0 - fil, 14.0);
-
-      // ── Calacatta (light stone) ──
-      vec3 l_base = vec3(0.992, 0.990, 0.983);
-      vec3 l_warm = vec3(0.972, 0.962, 0.941);
-      vec3 l_deep = vec3(0.878, 0.859, 0.824);
-      vec3 l_gold = vec3(0.663, 0.510, 0.247);
-
-      // ── Nero Marquina (dark stone) ──
-      vec3 d_base = vec3(0.035, 0.032, 0.030);
-      vec3 d_warm = vec3(0.062, 0.057, 0.052);
-      vec3 d_deep = vec3(0.118, 0.108, 0.094);
-      vec3 d_gold = vec3(0.847, 0.694, 0.373);
-
-      vec3 base = mix(l_base, d_base, u_dark);
-      vec3 warm = mix(l_warm, d_warm, u_dark);
-      vec3 deep = mix(l_deep, d_deep, u_dark);
-      vec3 gold = mix(l_gold, d_gold, u_dark);
-
-      // veins read brighter and sharper on black stone
-      float veinAmt = mix(0.20, 0.34, u_dark);
-      float filAmt  = mix(0.30, 0.52, u_dark);
-      float deepAmt = mix(0.30, 0.38, u_dark);
-
-      vec3 col = mix(base, warm, smoothstep(-0.45, 0.65, f));
-      col = mix(col, deep, smoothstep(0.25, 0.95, length(q)) * deepAmt);
-      col = mix(col, gold, vein * veinAmt);
-      col = mix(col, gold * 1.08, fil * filAmt);
-
-      // polished sheen that tracks the pointer
-      float sheen = 1.0 - smoothstep(0.0, 1.1, length(uv - u_mouse * 0.9));
-      col += sheen * mix(0.04, 0.055, u_dark);
-
-      // keep the centre calm so type always sits on quiet stone
-      float centre = 1.0 - smoothstep(0.15, 0.95, length(uv * vec2(0.8, 1.25)));
-      col = mix(col, mix(col, base, mix(0.62, 0.74, u_dark)), centre);
-
-      gl_FragColor = vec4(col, 1.0);
-    }
-  `;
-
-  function compile(type, src) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src);
-    gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-      console.error(gl.getShaderInfoLog(s));
-      return null;
-    }
-    return s;
-  }
-
-  const vs = compile(gl.VERTEX_SHADER, vert);
-  const fs = compile(gl.FRAGMENT_SHADER, frag);
-  if (!vs || !fs) {
-    canvas.classList.add('no-webgl');
-    return;
-  }
-
-  const prog = gl.createProgram();
-  gl.attachShader(prog, vs);
-  gl.attachShader(prog, fs);
-  gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(prog));
-    return;
-  }
-  gl.useProgram(prog);
-
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
-  const loc = gl.getAttribLocation(prog, 'p');
-  gl.enableVertexAttribArray(loc);
-  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-
-  const uRes   = gl.getUniformLocation(prog, 'u_res');
-  const uTime  = gl.getUniformLocation(prog, 'u_time');
-  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
-  const uDark  = gl.getUniformLocation(prog, 'u_dark');
-
-  // render at reduced resolution — marble is soft, nobody sees the difference,
-  // and it keeps the fragment cost sane on laptops (and lower still on phones,
-  // where the GPU is weaker and this was visibly janking scroll)
-  const SCALE = window.innerWidth < 700 ? 0.32 : 0.5;
-
-  function resize() {
-    const w = Math.max(1, Math.floor(window.innerWidth * SCALE));
-    const h = Math.max(1, Math.floor(window.innerHeight * SCALE));
-    if (canvas.width !== w || canvas.height !== h) {
-      canvas.width = w;
-      canvas.height = h;
-      gl.viewport(0, 0, w, h);
-    }
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  let mx = 0, my = 0, tmx = 0, tmy = 0;
-  window.addEventListener('mousemove', (e) => {
-    tmx = (e.clientX / window.innerWidth) * 2 - 1;
-    tmy = -((e.clientY / window.innerHeight) * 2 - 1);
-  }, { passive: true });
-
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const start = performance.now();
-
-  // the stone itself morphs between Calacatta and Nero Marquina
-  let dark = 0, darkTarget = 0;
-  window.__setMarbleDark = (v, instant) => {
-    darkTarget = v ? 1 : 0;
-    if (instant) dark = darkTarget;   // on first paint, start on the right stone
-    if (reduced) requestAnimationFrame(frame);
-  };
-
-  // the marble drifts slowly — redrawing at 30fps instead of 60 halves the GPU
-  // cost with no visible loss, which is what was fighting the browser for
-  // frames during scroll and reading as stutter
-  let lastDraw = 0;
-  const FRAME_MS = 1000 / 30;
-
-  function frame(now) {
-    if (now - lastDraw < FRAME_MS) { requestAnimationFrame(frame); return; }
-    lastDraw = now;
-
-    mx += (tmx - mx) * 0.045;
-    my += (tmy - my) * 0.045;
-    // ~0.6s to settle, so the stone lands with the 700ms CSS colour transition
-    dark += (darkTarget - dark) * 0.085;
-
-    gl.uniform2f(uRes, canvas.width, canvas.height);
-    gl.uniform1f(uTime, reduced ? 12.0 : (now - start) / 1000);
-    gl.uniform2f(uMouse, mx, my);
-    gl.uniform1f(uDark, dark);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-    // when motion is reduced, only keep drawing while the stone is still morphing
-    if (!reduced || Math.abs(darkTarget - dark) > 0.002) requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
-
-
-/* ═══════════════ 1b. THEME TOGGLE ═══════════════ */
+/* ═══════════════ 1. THEME TOGGLE ═══════════════ */
 (function theme() {
   let saved = null;
   try { saved = localStorage.getItem('blu-theme'); } catch (e) {}
@@ -1558,14 +1350,13 @@
   // light is the default; dark only when the visitor has chosen it here before
   let isDark = saved === 'dark';
 
-  function apply(dark, save, instant) {
+  function apply(dark, save) {
     isDark = dark;
     document.body.classList.toggle('dark', dark);
-    if (window.__setMarbleDark) window.__setMarbleDark(dark, instant);
     if (save) { try { localStorage.setItem('blu-theme', dark ? 'dark' : 'light'); } catch (e) {} }
   }
 
-  apply(isDark, false, true);
+  apply(isDark, false);
 
   document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
     btn.addEventListener('click', () => apply(!isDark, true));
@@ -1594,7 +1385,6 @@
 
   function finish() {
     loader.classList.add('done');
-    document.body.classList.remove('locked');
     revealHero();
   }
 })();
@@ -1607,9 +1397,13 @@ function revealHero() {
   const text = nameEl.textContent;
   nameEl.textContent = '';
   [...text].forEach((c, i) => {
+    if (c === ' ') {
+      nameEl.appendChild(document.createTextNode(' '));
+      return;
+    }
     const s = document.createElement('span');
     s.className = 'ch';
-    s.textContent = c === ' ' ? ' ' : c;
+    s.textContent = c;
     s.style.transitionDelay = (i * 32) + 'ms';
     nameEl.appendChild(s);
   });
@@ -1625,29 +1419,44 @@ function revealHero() {
 }
 
 
-/* ═══════════════ 4. CUSTOM CURSOR ═══════════════ */
-(function cursor() {
-  const dot = document.getElementById('curDot');
-  const ring = document.getElementById('curRing');
-  let x = 0, y = 0, rx = 0, ry = 0;
+/* ═══════════════ 4. SCROLL GATE ═══════════════ */
+// bajar de la pantalla principal solo pasa al hacer click en "Explorar" o
+// en los pills Sobre mí / Proyectos / Stack (candado overflow:hidden en
+// body, igual que el preloader). Dentro de las secciones el scroll es
+// libre en ambos sentidos; lo único que se bloquea es volver a subir a
+// la pantalla principal con la rueda/trackpad/touch — eso solo pasa
+// tocando "Inicio" en el nav.
+window.unlockHeroGate = function () {
+  document.body.classList.remove('locked');
+};
 
-  window.addEventListener('mousemove', (e) => {
-    x = e.clientX; y = e.clientY;
-    dot.style.transform = `translate(${x}px, ${y}px)`;
+(function heroFloor() {
+  function atHeroFloor() {
+    return window.scrollY <= document.getElementById('app').offsetTop + 1;
+  }
+
+  window.addEventListener('wheel', (e) => {
+    if (e.deltaY < 0 && atHeroFloor()) e.preventDefault();
+  }, { passive: false });
+
+  let touchY = null;
+  window.addEventListener('touchstart', (e) => {
+    touchY = e.touches[0].clientY;
   }, { passive: true });
 
-  (function loop() {
-    rx += (x - rx) * 0.16;
-    ry += (y - ry) * 0.16;
-    ring.style.transform = `translate(${rx}px, ${ry}px)`;
-    requestAnimationFrame(loop);
-  })();
+  window.addEventListener('touchmove', (e) => {
+    if (touchY === null) return;
+    const y = e.touches[0].clientY;
+    if (y > touchY && atHeroFloor()) {
+      e.preventDefault(); // dedo baja en pantalla → intento de scroll hacia arriba
+    }
+    touchY = y;
+  }, { passive: false });
 
-  document.addEventListener('mouseover', (e) => {
-    if (e.target.closest('[data-cursor]')) ring.classList.add('grow');
-  });
-  document.addEventListener('mouseout', (e) => {
-    if (e.target.closest('[data-cursor]')) ring.classList.remove('grow');
+  window.addEventListener('touchend', () => { touchY = null; });
+
+  window.addEventListener('keydown', (e) => {
+    if (['ArrowUp', 'PageUp', 'Home'].includes(e.key) && atHeroFloor()) e.preventDefault();
   });
 })();
 
@@ -1673,6 +1482,8 @@ document.querySelectorAll('.mg').forEach(btn => {
   const prog = document.getElementById('progress');
   const hero = document.getElementById('hero');
   const items = [...document.querySelectorAll('#hero .rv'), document.getElementById('heroName')];
+  const sandBg = document.querySelector('.scene-sand');
+  const contentScrim = document.querySelector('.content-scrim');
   let ticking = false;
 
   // reading offsetHeight/scrollHeight on every scroll event forces a synchronous
@@ -1681,10 +1492,12 @@ document.querySelectorAll('.mg').forEach(btn => {
   // once and only re-measure on resize.
   let heroH = hero.offsetHeight;
   let maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  let fadeDist = Math.min(heroH * 0.6, Math.max(maxScroll, 1));
 
   function measure() {
     heroH = hero.offsetHeight;
     maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    fadeDist = Math.min(heroH * 0.6, Math.max(maxScroll, 1));
   }
   window.addEventListener('resize', measure, { passive: true });
 
@@ -1694,28 +1507,32 @@ document.querySelectorAll('.mg').forEach(btn => {
     requestAnimationFrame(() => {
       prog.style.width = (maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0) + '%';
 
-      const p = Math.min(window.scrollY / heroH, 1);
+      const p = Math.min(window.scrollY / fadeDist, 1);
       items.forEach(el => {
         if (!el) return;
         el.style.opacity = String(Math.max(0, 1 - p * 1.25));
       });
       hero.style.transform = `translateY(${p * 60}px)`;
+      sandBg.style.opacity = String(p);
+      contentScrim.style.opacity = String(p * 0.85);
       ticking = false;
     });
   }, { passive: true });
 })();
 
 
-/* ═══════════════ 7. PANELS ═══════════════ */
-const track = document.getElementById('track');
+/* ═══════════════ 7. PANELS (scroll continuo + scroll-spy) ═══════════════ */
 const panelLinks = [...document.querySelectorAll('#nav a.panel-link')];
 const panels = [...document.querySelectorAll('.panel')];
 const navInk = document.getElementById('navInk');
 const app = document.getElementById('app');
-const count = panelLinks.length;
+const header = document.querySelector('header.topbar');
 
-track.style.width = (count * 100) + '%';
-panels.forEach(p => p.style.width = (100 / count) + '%');
+function setHeaderHeight() {
+  document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+}
+setHeaderHeight();
+window.addEventListener('resize', setHeaderHeight);
 
 function moveInk(link) {
   if (!link) return;
@@ -1723,48 +1540,49 @@ function moveInk(link) {
   navInk.style.width = link.offsetWidth + 'px';
 }
 
-function revealPanel(panel) {
-  const els = panel.querySelectorAll('.rv');
-  els.forEach((el, i) => {
-    el.classList.remove('in');
-    el.style.transitionDelay = (i * 55) + 'ms';
-  });
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => els.forEach(el => el.classList.add('in')));
-  });
-}
-
-function goTo(index) {
-  track.style.transform = `translateX(-${index * (100 / count)}%)`;
+function setActive(index) {
   panelLinks.forEach((a, i) => a.classList.toggle('active', i === index));
   moveInk(panelLinks[index]);
-  panels[index].scrollTop = 0;
-  revealPanel(panels[index]);
 }
 
-panelLinks.forEach((a, i) => {
-  a.addEventListener('click', (e) => { e.preventDefault(); goTo(i); });
+// reveal each panel's content the first time it scrolls into view
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.panel .rv').forEach((el, i) => {
+  el.style.transitionDelay = ((i % 8) * 55) + 'ms';
+  revealObserver.observe(el);
 });
 
-document.querySelectorAll('.hero-pills a[data-index]').forEach(a => {
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    goTo(parseInt(a.dataset.index, 10));
-    app.scrollIntoView({ behavior: 'smooth' });
+// scroll-spy: highlight whichever panel currently sits just under the sticky header
+const spyObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = panels.indexOf(entry.target);
+      if (idx !== -1) setActive(idx);
+    }
   });
-});
+}, { rootMargin: `-${header.offsetHeight + 10}px 0px -70% 0px` });
+
+panels.forEach(p => spyObserver.observe(p));
+
+setActive(0);
+window.addEventListener('resize', () => moveInk(document.querySelector('#nav a.active')));
 
 document.getElementById('heroScroll').addEventListener('click', () => {
+  window.unlockHeroGate();
   app.scrollIntoView({ behavior: 'smooth' });
 });
 
-document.getElementById('navHome').addEventListener('click', (e) => {
-  e.preventDefault();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+document.querySelectorAll('.hero-pills a[href^="#"]').forEach(a => {
+  a.addEventListener('click', () => window.unlockHeroGate());
 });
-
-goTo(0);
-window.addEventListener('resize', () => moveInk(document.querySelector('#nav a.active')));
 
 
 /* ═══════════════ 8. PROJECT FILTERS ═══════════════ */
