@@ -98,6 +98,7 @@ img { max-width: 100%; }
   padding: 0 22px;
   border-radius: 999px;
   border: 1px solid transparent;
+  background: transparent;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -482,13 +483,19 @@ a[href^="#"]:hover .arr { transform: translateY(2px); }
   text-decoration: none;
   overflow-wrap: anywhere;
   padding-bottom: 6px;
-  margin-bottom: 44px;
+  margin-bottom: 24px;
   background: linear-gradient(var(--accent), var(--accent)) 0 100% / 100% 2px no-repeat;
   transition: color 250ms var(--ease);
 }
 .contact-mail:hover { color: var(--accent); }
 .contact-mail .arr { color: var(--accent); }
 .contact-mail:hover .arr { transform: translateX(6px); }
+/* al llegar desde "Contactar" el correo se enciende: deja claro dónde quedaste */
+.contact-mail.flash { animation: flash 1.8s var(--ease); }
+@keyframes flash { 25% { color: var(--accent); text-shadow: 0 0 28px rgba(255,177,59,0.5); } }
+
+.contact-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 44px; }
+.btn.done { border-color: var(--up); color: var(--up); }
 
 .contact-grid { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .contact-card {

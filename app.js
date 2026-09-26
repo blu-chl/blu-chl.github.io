@@ -1006,3 +1006,42 @@ const vanChart = mount($('#tChartVan'), (container, w) => {
   measure();
   request();
 })();
+
+
+/* ═══════════════ 9. CONTACTO ═══════════════ */
+(function contacto() {
+  const mail = $('.contact-mail');
+  const copy = $('#copyMail');
+
+  // "Contactar" baja hasta aquí: al llegar, el correo se enciende para que se note el destino
+  $$('a[href="#contacto"]').forEach(a => a.addEventListener('click', () => {
+    mail.classList.remove('flash');
+    void mail.offsetWidth; // reinicia la animación si se hace clic dos veces
+    setTimeout(() => mail.classList.add('flash'), REDUCE ? 0 : 750);
+  }));
+  mail.addEventListener('animationend', () => mail.classList.remove('flash'));
+
+  if (!copy) return;
+  copy.addEventListener('click', async () => {
+    const text = copy.dataset.mail;
+    let ok = false;
+    try {
+      await navigator.clipboard.writeText(text);
+      ok = true;
+    } catch (e) {
+      // respaldo para navegadores sin permiso de portapapeles
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { ok = document.execCommand('copy'); } catch (err) {}
+      ta.remove();
+    }
+    copy.textContent = ok ? 'Copiado ✓' : text;
+    copy.classList.toggle('done', ok);
+    clearTimeout(copy._t);
+    copy._t = setTimeout(() => { copy.textContent = 'Copiar correo'; copy.classList.remove('done'); }, 2200);
+  });
+})();
