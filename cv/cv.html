@@ -169,7 +169,7 @@
           <div class="job-head"><p class="job-title">Profesor particular y conductor de Uber</p><p class="job-date">2025 — 2026</p></div>
           <p class="job-org"><i style="background: var(--c1)"></i>Trabajo independiente · Temuco, Chile</p>
           <ul class="b">
-            <li>Clases particulares de micro y macroeconomía, contabilidad y finanzas; en paralelo, conductor de Uber.</li>
+            <li>Año de transición: rendí mi examen de grado, di clases particulares de micro y macroeconomía, contabilidad y finanzas, y trabajé como conductor de Uber.</li>
             <li>Certificaciones en análisis de datos (Google), Power BI, Excel y freeCodeCamp.</li>
           </ul>
         </article>
@@ -283,7 +283,7 @@ const HOY = now.getFullYear() * 12 + now.getMonth();
 const D0 = mi([2020, 1]), D1 = HOY + 2;
 
 // meses laborales acumulados (todo menos pregrado e intercambio)
-document.getElementById('kMeses').textContent = ETAPAS.filter(e => e.fila >= 2)
+document.getElementById('kMeses').textContent = ETAPAS.filter(e => [2, 3, 5].includes(e.fila))
   .reduce((n, e) => n + ((e.e ? mi(e.e) + 1 : HOY + 1) - mi(e.s)), 0);
 
 const box = document.getElementById('tl');
