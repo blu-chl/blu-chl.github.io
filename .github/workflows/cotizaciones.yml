@@ -1,0 +1,40 @@
+name: Cotizaciones
+
+# Cada 15 min en días hábiles, de 12:00 a 21:59 UTC: cubre la apertura de la
+# Bolsa de Santiago y el cierre de Nueva York. El JSON se publica en la rama
+# `datos` (un solo commit, se reescribe) para no ensuciar el historial de main.
+on:
+  schedule:
+    - cron: "*/15 12-21 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cotizaciones
+  cancel-in-progress: true
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Bajar cotizaciones
+        run: python scripts/cotizaciones.py > "$RUNNER_TEMP/cotizaciones.json"
+
+      - name: Publicar en la rama datos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch --orphan datos-tmp
+          cp "$RUNNER_TEMP/cotizaciones.json" cotizaciones.json
+          git add cotizaciones.json
+          git commit -m "Cotizaciones $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push --force origin HEAD:datos
