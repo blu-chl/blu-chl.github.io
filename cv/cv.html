@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Benjamin Lara Urra — CV</title>
+<!-- Fuente del CV.pdf: se imprime con Chrome (A4, sin márgenes). Para actualizar,
+     editar este archivo y volver a generar el PDF. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Doto:wght,ROND@600..900,100&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #15171a;
+    --ink-2: #3b3934;
+    --muted: #6b675f;
+    --line: #e2dfd7;
+    --side: #f4f2ed;
+    --amber: #a8650a;       /* ámbar legible sobre blanco */
+    --led: #ffb13b;         /* ámbar LED sobre negro */
+    --band: #0a0b0d;
+    --green: #2fbf6d;
+    --c1: #2a6fc4;
+    --c2: #b7822a;
+    --c3: #1f9e89;
+    --doto: 'Doto', 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', Consolas, monospace;
+  }
+
+  html, body { width: 210mm; background: #fff; }
+  body { font-family: var(--sans); color: var(--ink); font-size: 8.4pt; line-height: 1.42; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; overflow: hidden; display: flex; flex-direction: column; }
+  .band, .tape { flex-shrink: 0; }
+
+  /* ── Banda superior: pizarra LED ── */
+  .band { position: relative; background: var(--band); color: #f1eee7; padding: 7.5mm 12mm 6mm; display: flex; align-items: center; gap: 8mm; }
+  .band::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.07) 0.6px, transparent 1px); background-size: 3px 3px; }
+  .band > * { position: relative; }
+  .id { flex: 1; min-width: 0; }
+  .role { font-family: var(--mono); font-size: 7.6pt; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase; color: var(--led); margin-bottom: 2.4mm; }
+  .name { font-family: var(--doto); font-weight: 800; font-size: 28pt; line-height: 1; letter-spacing: 0.01em; text-transform: uppercase; text-shadow: 0 0 10px rgba(241,238,231,0.15); margin-bottom: 3.6mm; white-space: nowrap; }
+  .contact { display: flex; flex-wrap: wrap; gap: 1.2mm 4mm; font-family: var(--mono); font-size: 6.9pt; color: #c9c4ba; }
+  .contact span { display: inline-flex; align-items: center; gap: 1.6mm; }
+  .contact svg { width: 3mm; height: 3mm; color: var(--led); }
+  .contact a { color: inherit; text-decoration: none; }
+  .photo { width: 24mm; height: 24mm; border-radius: 50%; padding: 1mm; border: 0.3mm solid rgba(255,177,59,0.7); flex-shrink: 0; }
+  .photo img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+
+  /* ── Cinta tipo bolsa ── */
+  .tape { background: #050607; border-top: 0.2mm solid rgba(255,255,255,0.06); height: 7mm; display: flex; align-items: center; gap: 5mm; padding: 0 12mm; overflow: hidden; white-space: nowrap; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); font-family: var(--doto); font-weight: 800; font-size: 9.6pt; }
+  .tape span { color: var(--led); }
+  .tape b { font-weight: 800; color: #f1eee7; }
+  .tape i { font-style: normal; color: var(--green); font-family: var(--sans); font-size: 6.5pt; }
+
+  /* ── Cuerpo ── */
+  .body { flex: 1; display: grid; grid-template-columns: 1fr 64mm; }
+  .main { padding: 5.5mm 7mm 5mm 12mm; }
+  .side { background: var(--side); padding: 5.5mm 10mm 5mm 6.5mm; }
+
+  h2 { display: flex; align-items: baseline; gap: 2.2mm; font-family: var(--mono); font-size: 7.6pt; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); margin: 0 0 2.4mm; padding-bottom: 1.4mm; border-bottom: 0.25mm solid var(--line); position: relative; }
+  h2::after { content: ''; position: absolute; left: 0; bottom: -0.25mm; width: 12mm; height: 0.5mm; background: var(--amber); }
+  h2 .n { font-family: var(--doto); font-weight: 800; font-size: 11pt; letter-spacing: 0; color: var(--amber); }
+  section + section { margin-top: 4mm; }
+
+  .perfil { color: var(--ink-2); font-size: 8.3pt; line-height: 1.48; }
+
+  /* línea de tiempo */
+  .tl { margin: 0.2mm 0 2.6mm; }
+  .tl svg { display: block; width: 100%; overflow: visible; }
+  .tl text { font-family: var(--mono); }
+
+  .job { break-inside: avoid; }
+  .job + .job { margin-top: 2.3mm; }
+  .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 3mm; }
+  .job-title { font-weight: 600; font-size: 9pt; }
+  .job-date { font-family: var(--mono); font-size: 7pt; color: var(--muted); white-space: nowrap; }
+  .job-org { display: flex; align-items: center; gap: 1.6mm; font-size: 7.9pt; color: var(--ink-2); margin: 0.3mm 0 1mm; }
+  .job-org i { width: 1.8mm; height: 1.8mm; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .now { font-family: var(--mono); font-size: 6.2pt; font-weight: 600; letter-spacing: 0.1em; color: #fff; background: var(--amber); border-radius: 0.8mm; padding: 0.2mm 1.2mm; margin-left: 1.5mm; vertical-align: 0.3mm; }
+  ul.b { list-style: none; }
+  ul.b li { position: relative; padding-left: 3mm; color: var(--ink-2); font-size: 7.9pt; line-height: 1.38; }
+  ul.b li + li { margin-top: 0.5mm; }
+  ul.b li::before { content: ''; position: absolute; left: 0.3mm; top: 1.55mm; width: 1.2mm; height: 0.3mm; background: var(--amber); }
+
+  /* barra lateral */
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25mm; background: var(--line); border: 0.25mm solid var(--line); border-radius: 1.6mm; overflow: hidden; margin-bottom: 4.6mm; }
+  .kpi { background: #fff; padding: 2mm 2.4mm 1.8mm; }
+  .kpi b { display: block; font-family: var(--doto); font-weight: 800; font-size: 17pt; line-height: 1; color: var(--ink); }
+  .kpi span { font-size: 6.6pt; color: var(--muted); line-height: 1.25; display: block; margin-top: 0.8mm; }
+
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .edu-t { font-weight: 600; font-size: 8.4pt; line-height: 1.3; }
+  .edu-o { font-size: 7.7pt; color: var(--ink-2); }
+  .edu-d { font-family: var(--mono); font-size: 6.9pt; color: var(--muted); margin: 0.3mm 0 0.6mm; }
+  .edu-x { font-size: 7.5pt; color: var(--ink-2); line-height: 1.4; }
+  .hl { color: var(--amber); font-weight: 600; }
+
+  .grp + .grp { margin-top: 2mm; }
+  .grp-t { font-family: var(--mono); font-size: 6.6pt; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1mm; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.9mm; }
+  .chip { font-family: var(--mono); font-size: 6.8pt; background: #fff; border: 0.25mm solid var(--line); border-radius: 0.9mm; padding: 0.35mm 1.3mm; color: var(--ink-2); white-space: nowrap; }
+
+  .list { list-style: none; }
+  .list li { font-size: 7.7pt; color: var(--ink-2); padding: 0.75mm 0; border-bottom: 0.2mm dotted #cfcbc2; display: flex; justify-content: space-between; gap: 2mm; }
+  .list li:last-child { border-bottom: 0; }
+  .list li span:last-child { font-family: var(--mono); font-size: 6.8pt; color: var(--muted); text-align: right; }
+
+  .proj + .proj { margin-top: 1.7mm; }
+  .proj-t { font-weight: 600; font-size: 7.9pt; }
+  .proj-t .code { font-family: var(--doto); font-weight: 800; font-size: 8.4pt; color: var(--amber); margin-right: 1.4mm; }
+  .proj-d { font-size: 7.3pt; color: var(--ink-2); line-height: 1.35; }
+  .more { display: block; margin-top: 2.2mm; font-family: var(--mono); font-size: 7pt; color: var(--amber); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="band">
+    <div class="id">
+      <p class="role">Ingeniero Comercial · Finanzas · Control de gestión · Datos</p>
+      <h1 class="name">Benjamin Lara Urra</h1>
+      <div class="contact">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+56984281982">+56 9 8428 1982</a></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg><a href="mailto:benjamin.lara.urra@gmail.com">benjamin.lara.urra@gmail.com</a></span>
+        <span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><a href="https://linkedin.com/in/blu-ingeco">linkedin.com/in/blu-ingeco</a></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><a href="https://blu-chl.github.io">blu-chl.github.io</a></span>
+      </div>
+    </div>
+    <div class="photo"><img src="../foto.jpg" alt=""></div>
+  </header>
+
+  <div class="tape" aria-hidden="true">
+    <span>BLU</span><b>INGECO</b><i>▲</i>
+    <span>FINANZAS</span><i>▲</i>
+    <span>CONTROL DE GESTIÓN</span><i>▲</i>
+    <span>FLUJO DE CAJA</span><i>▲</i>
+    <span>PYTHON</span><i>▲</i>
+    <span>SQL</span><i>▲</i>
+    <span>POWER BI</span><i>▲</i>
+    <span>BIGQUERY</span><i>▲</i>
+    <span>INGLÉS C1</span><i>▲</i>
+  </div>
+
+  <div class="body">
+    <main class="main">
+      <section>
+        <h2><span class="n">01</span>Perfil</h2>
+        <p class="perfil">Ingeniero Comercial con Diploma de Alto Honor Académico y experiencia en contabilidad, finanzas y operaciones en Chile y EE.UU. Hoy soy Administrativo Contable en Maestranza HHH, a cargo de conciliaciones, cuentas por pagar y cobrar y flujo de caja. Automatizo reportes con Python, SQL, BigQuery y Power BI, y trabajo con soltura en inglés y en equipos multiculturales.</p>
+      </section>
+
+      <section>
+        <h2><span class="n">02</span>Experiencia</h2>
+        <div class="tl" id="tl"></div>
+
+        <article class="job">
+          <div class="job-head"><p class="job-title">Administrativo Contable <span class="now">ACTUAL</span></p><p class="job-date">Ago. 2026 — hoy</p></div>
+          <p class="job-org"><i style="background: var(--c1)"></i>Maestranza HHH · Chile</p>
+          <ul class="b">
+            <li>Conciliación bancaria y registro contable en el ERP, con lectura automatizada de cartolas en Python.</li>
+            <li>Control de cuentas por pagar y por cobrar, planes de pago y flujo de caja proyectado.</li>
+            <li>Panel financiero sobre BigQuery para el seguimiento diario de caja, cheques y obligaciones.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head"><p class="job-title">Work &amp; Travel — Gestión Operativa</p><p class="job-date">Dic. 2024 — Mar. 2025</p></div>
+          <p class="job-org"><i style="background: var(--c3)"></i>Coast Pizza · Girdwood, Alaska, EE.UU.</p>
+          <ul class="b">
+            <li>Gestión de producción en un entorno de alta demanda, cumpliendo estándares de calidad bajo presión continua.</li>
+            <li>Trabajo en equipo multicultural con comunicación exclusivamente en inglés.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head"><p class="job-title">Practicante — Finanzas, RRHH y Contabilidad</p><p class="job-date">Ago. 2024 — Nov. 2024</p></div>
+          <p class="job-org"><i style="background: var(--c1)"></i>Agrifor · Temuco, Chile</p>
+          <ul class="b">
+            <li>Rediseño en Excel de la planificación de turnos para 150 personas: 100 % de mejora en cobertura operativa, reemplazando un software con fallas recurrentes.</li>
+            <li>Registro y digitalización diaria de documentos contables, apoyando la conciliación y el cierre mensual.</li>
+            <li>Consolidación de información financiera de varias áreas en reportes de gestión para gerencia.</li>
+            <li>Revisiones de control interno, identificando desviaciones y proponiendo mejoras administrativas.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head"><p class="job-title">Work &amp; Travel — Operaciones y Calidad</p><p class="job-date">Dic. 2022 — Mar. 2023</p></div>
+          <p class="job-org"><i style="background: var(--c3)"></i>The Charleston Place (5★) · Carolina del Sur, EE.UU.</p>
+          <ul class="b">
+            <li>Gestión logística en un hotel cinco estrellas bajo estándares internacionales de calidad.</li>
+            <li>Coordinación en inglés con equipos multiculturales en un entorno de alta exigencia operativa.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="job-head"><p class="job-title">Practicante — Gestión Comercial y Finanzas</p><p class="job-date">Dic. 2021 — Mar. 2022</p></div>
+          <p class="job-org"><i style="background: var(--c1)"></i>Agrotop · Padre Las Casas, Chile</p>
+          <ul class="b">
+            <li>Soporte en el cierre de 2 a 3 contratos agrícolas diarios sobre $1.000.000 c/u, elaborando liquidaciones financieras para gerencia.</li>
+            <li>Control de flujos de pago a una cartera amplia de proveedores agrícolas de La Araucanía.</li>
+            <li>Gestión documental y registro contable con trazabilidad para auditorías internas.</li>
+          </ul>
+        </article>
+      </section>
+        <section>
+          <h2><span class="n">03</span>Educación</h2>
+          <div class="edu-grid">
+          <div class="edu">
+            <p class="edu-t">Ingeniería Comercial</p>
+            <p class="edu-o">Universidad Mayor · Temuco, Chile</p>
+            <p class="edu-d">2020 — 2025</p>
+            <p class="edu-x"><span class="hl">Diploma de Alto Honor Académico.</span> Análisis financiero, evaluación de inversiones y valoración de activos.</p>
+          </div>
+          <div class="edu">
+            <p class="edu-t">Formación en el extranjero</p>
+            <p class="edu-o">Hogeschool VIVES · Bélgica</p>
+            <p class="edu-d">Sep. 2023 — Ene. 2024</p>
+            <p class="edu-x">Cursos en inglés: Marketing Internacional, Economía Social, Decisiones con IA y Finanzas Aplicadas.</p>
+          </div>
+          </div>
+        </section>
+    </main>
+
+    <aside class="side">
+      <div class="kpis">
+        <div class="kpi"><b id="kMeses">18</b><span>meses de experiencia laboral</span></div>
+        <div class="kpi"><b>3</b><span>países: Chile, Bélgica, EE.UU.</span></div>
+        <div class="kpi"><b>6,2</b><span>promedio de titulación, de 7,0</span></div>
+        <div class="kpi"><b>C1</b><span>inglés certificado</span></div>
+      </div>
+
+
+      <section>
+        <h2><span class="n">04</span>Competencias</h2>
+        <div class="grp"><p class="grp-t">Finanzas</p><div class="chips"><span class="chip">Control presupuestario</span><span class="chip">Conciliación contable</span><span class="chip">Flujo de caja</span><span class="chip">KPIs</span><span class="chip">Evaluación de proyectos</span><span class="chip">Control interno</span></div></div>
+        <div class="grp"><p class="grp-t">Datos y herramientas</p><div class="chips"><span class="chip">Excel avanzado</span><span class="chip">Power BI</span><span class="chip">SQL</span><span class="chip">BigQuery</span><span class="chip">Python</span><span class="chip">Tableau</span><span class="chip">Google Sheets</span><span class="chip">MS Office</span></div></div>
+        <div class="grp"><p class="grp-t">IA aplicada</p><div class="chips"><span class="chip">Claude</span><span class="chip">Gemini</span></div></div>
+        <div class="grp"><p class="grp-t">Idiomas</p><div class="chips"><span class="chip">Español nativo</span><span class="chip">Inglés C1 certificado</span></div></div>
+      </section>
+
+      <section>
+        <h2><span class="n">05</span>Certificaciones</h2>
+        <ul class="list">
+          <li><span>Python Intermedio</span><span>certificado</span></li>
+          <li><span>Power BI Intermedio</span><span>certificado</span></li>
+          <li><span>Excel Avanzado</span><span>certificado</span></li>
+          <li><span>Inglés C1 Avanzado</span><span>certificado</span></li>
+          <li><span>Licencia de conducir clase B</span><span>vigente</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2><span class="n">06</span>Proyectos</h2>
+        <div class="proj"><p class="proj-t"><span class="code">KFIN</span>Kit Financiero para Pastelerías</p><p class="proj-d">Ingresos, gastos y reportes para decidir mejor · Next.js, Supabase.</p></div>
+        <div class="proj"><p class="proj-t"><span class="code">RAUT</span>Reporte Automático</p><p class="proj-d">Convierte cualquier Excel en un reporte PDF · Python, Pandas.</p></div>
+        <div class="proj"><p class="proj-t"><span class="code">CYCL</span>Cyclistic Bike-Share</p><p class="proj-d">Análisis de 4,2 M de viajes y recomendaciones de marketing.</p></div>
+        <a class="more" href="https://blu-chl.github.io">Más en blu-chl.github.io →</a>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<script>
+(function () {
+// Línea de tiempo: mismas etapas que el portafolio, en miniatura.
+const ETAPAS = [
+  { fila: 0, color: '--c1', t: 'Ingeniería Comercial · U. Mayor', s: [2020, 3], e: [2025, 12], dentro: true },
+  { fila: 1, color: '--c2', t: 'VIVES · Bélgica', s: [2023, 9], e: [2024, 1] },
+  { fila: 2, color: '--c1', t: 'Agrotop', s: [2021, 12], e: [2022, 3] },
+  { fila: 2, color: '--c1', t: 'Agrifor', s: [2024, 8], e: [2024, 11] },
+  { fila: 3, color: '--c3', t: 'Charleston Place', s: [2022, 12], e: [2023, 3] },
+  { fila: 3, color: '--c3', t: 'Coast Pizza · Alaska', s: [2024, 12], e: [2025, 3] },
+  { fila: 4, color: '--c1', t: 'Maestranza HHH', s: [2026, 8], e: null, hoy: true }
+];
+const FILAS = ['Pregrado', 'Intercambio', 'Prácticas', 'Work & Travel', 'Empleo'];
+const now = new Date();
+const mi = ([y, m]) => y * 12 + m - 1;
+const HOY = now.getFullYear() * 12 + now.getMonth();
+const D0 = mi([2020, 1]), D1 = HOY + 2;
+
+// meses laborales acumulados (todo menos pregrado e intercambio)
+document.getElementById('kMeses').textContent = ETAPAS.filter(e => e.fila >= 2)
+  .reduce((n, e) => n + ((e.e ? mi(e.e) + 1 : HOY + 1) - mi(e.s)), 0);
+
+const box = document.getElementById('tl');
+const W = box.clientWidth, L = 62, R = W - 2, rowH = 10, T0 = 8, H = T0 + FILAS.length * rowH + 13;
+const x = m => L + (m - D0) / (D1 - D0) * (R - L);
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+let s = `<svg viewBox="0 0 ${W} ${H}" height="${H}">`;
+for (let yr = 2020; mi([yr, 1]) < D1; yr++) {
+  const a = x(mi([yr, 1]));
+  s += `<line x1="${a}" x2="${a}" y1="${T0}" y2="${T0 + FILAS.length * rowH}" stroke="#ebe8e1" stroke-width="0.6"/>`;
+  const b = Math.min(x(mi([yr + 1, 1])), R);
+  s += `<text x="${(a + b) / 2}" y="${H - 3}" font-size="6.3" fill="${css('--muted')}" text-anchor="middle">${yr}</text>`;
+}
+FILAS.forEach((f, i) => {
+  const y = T0 + i * rowH;
+  s += `<text x="0" y="${y + 7.6}" font-size="5.9" fill="${css('--muted')}" letter-spacing="0.4">${f.toUpperCase()}</text>`;
+  s += `<line x1="${L}" x2="${R}" y1="${y + rowH}" y2="${y + rowH}" stroke="#ebe8e1" stroke-width="0.6"/>`;
+});
+ETAPAS.forEach(e => {
+  const y = T0 + e.fila * rowH + 2.5, h = 6;
+  const a = x(mi(e.s)), b = x(e.e ? mi(e.e) + 1 : HOY + 1);
+  s += `<rect x="${a}" y="${y}" width="${Math.max(2.5, b - a - 0.6)}" height="${h}" rx="1.6" fill="${css(e.color)}"/>`;
+  if (e.dentro) s += `<text x="${a + 4}" y="${y + 4.6}" font-size="5.6" fill="#fff" font-weight="600">${e.t}</text>`;
+  else if (e.hoy) s += `<text x="${a - 2.5}" y="${y + 4.8}" font-size="6" fill="${css('--ink')}" font-weight="600" text-anchor="end">${e.t}</text>`;
+  else s += `<text x="${b + 2.5}" y="${y + 4.8}" font-size="6" fill="${css('--ink-2')}">${e.t}</text>`;
+});
+const xh = x(HOY + now.getDate() / 31);
+s += `<line x1="${xh}" x2="${xh}" y1="${T0 - 1}" y2="${T0 + FILAS.length * rowH}" stroke="${css('--amber')}" stroke-width="0.9"/>`;
+s += `<text x="${xh}" y="${T0 - 3}" font-size="6" fill="${css('--amber')}" font-weight="600" text-anchor="middle">HOY</text>`;
+box.innerHTML = s + '</svg>';
+document.body.dataset.ready = '1';
+})();
+</script>
+</body>
+</html>
