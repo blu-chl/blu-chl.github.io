@@ -274,7 +274,7 @@ const TRAYECTORIA = [
   { id: 'agrotop', fila: 2, pais: 'chile', tipo: 'Práctica', laboral: true, mini: 'Agrotop', corto: 'Agrotop',
     titulo: 'Práctica en Gestión Comercial y Finanzas', org: 'Agrotop, Padre Las Casas',
     inicio: [2021, 12], fin: [2022, 3], periodo: 'Dic. 2021 — Mar. 2022',
-    desc: 'Cierre de 2 a 3 contratos agrícolas diarios sobre $1 millón y control de pagos a proveedores de La Araucanía.',
+    desc: 'Apoyé el cierre de 2 a 3 contratos agrícolas diarios sobre $1 millón, elaborando las liquidaciones para gerencia. Controlé los pagos a una cartera amplia de proveedores de La Araucanía y llevé el registro contable con trazabilidad para auditorías.',
     logo: { src: 'assets/logos/agrotop.png', alt: 'Agrotop', tono: 'logo-white' } },
   { id: 'vives', fila: 1, pais: 'belgica', tipo: 'Intercambio', mini: 'Vives', corto: 'Hogeschool VIVES',
     titulo: 'Intercambio académico', org: 'Hogeschool VIVES, Bélgica',
@@ -282,9 +282,9 @@ const TRAYECTORIA = [
     desc: 'Marketing internacional, economía social, decisiones con IA y finanzas aplicadas, todo en inglés.',
     logo: { src: 'assets/logos/vives.png', alt: 'Hogeschool VIVES' } },
   { id: 'charleston', fila: 3, pais: 'eeuu', tipo: 'Work & Travel', laboral: true, mini: 'Charleston', corto: 'Charleston Place',
-    titulo: 'Operaciones y Calidad', org: 'The Charleston Place (5★), Carolina del Sur',
+    titulo: 'Work & Travel · Steward', org: 'The Charleston Place, Carolina del Sur',
     inicio: [2022, 12], fin: [2023, 3], periodo: 'Dic. 2022 — Mar. 2023',
-    desc: 'Logística en un hotel cinco estrellas bajo estándares internacionales, con equipos multiculturales.',
+    desc: 'Mi primera temporada de Work & Travel: steward en la cocina de un hotel cinco estrellas. Trabajar todo en inglés y con gente de todo el mundo fue lo que más me dejó.',
     logo: { src: 'assets/logos/charleston-place.svg', alt: 'The Charleston Place', tono: 'logo-dark' } },
   { id: 'agrifor', fila: 2, pais: 'chile', tipo: 'Práctica', laboral: true, mini: 'Agrifor', corto: 'Agrifor',
     titulo: 'Práctica en Finanzas, RRHH y Contabilidad', org: 'Agrifor, Temuco',
@@ -292,18 +292,23 @@ const TRAYECTORIA = [
     desc: 'Rediseñé la planificación de turnos de 150 personas (+100 % de cobertura) y apoyé conciliación y cierre mensual.',
     logoTexto: 'Agrifor' },
   { id: 'alaska', fila: 3, pais: 'eeuu', tipo: 'Work & Travel', laboral: true, mini: 'Coast Pizza', corto: 'Coast Pizza',
-    titulo: 'Gestión Operativa', org: 'Coast Pizza, Girdwood, Alaska',
+    titulo: 'Work & Travel · Line cook', org: 'Coast Pizza, Girdwood, Alaska',
     inicio: [2024, 12], fin: [2025, 3], periodo: 'Dic. 2024 — Mar. 2025',
-    desc: 'Producción en un entorno de alta demanda, con comunicación 100 % en inglés.',
+    desc: 'Segunda temporada en EE.UU.: cocinero de línea en una pizzería de temporada alta, todo en inglés.',
     logo: { src: 'assets/logos/coast-pizza.png', alt: 'Coast Pizza' } },
-  { id: 'maestranza', fila: 4, pais: 'chile', tipo: 'Empleo', laboral: true, mini: 'Maestranza HHH', corto: 'Maestranza HHH',
+  { id: 'independiente', fila: 4, pais: 'chile', tipo: 'Independiente', laboral: true, mini: 'Independiente', corto: 'Clases particulares y Uber',
+    titulo: 'Profesor particular y conductor de Uber', org: 'Trabajo independiente, Temuco',
+    inicio: [2025, 4], fin: [2026, 7], periodo: '2025 — 2026',
+    desc: 'Clases particulares de microeconomía, macroeconomía, contabilidad y finanzas, y conductor de Uber. En paralelo me certifiqué en análisis de datos (Google), Power BI, Excel y freeCodeCamp.',
+    logoTexto: 'Independiente' },
+  { id: 'maestranza', fila: 5, pais: 'chile', tipo: 'Empleo', laboral: true, mini: 'Maestranza HHH', corto: 'Maestranza HHH',
     titulo: 'Administrativo Contable', org: 'Maestranza HHH',
     inicio: [2026, 8], fin: null, periodo: 'Ago. 2026 — hoy',
     desc: 'Conciliaciones bancarias, cuentas por pagar y por cobrar, y flujo de caja. Automatizo procesos contables con Python y BigQuery.',
     logoTexto: 'Maestranza HHH' }
 ];
 
-const FILAS = ['Pregrado', 'Intercambio', 'Prácticas', 'Work & Travel', 'Empleo'];
+const FILAS = ['Pregrado', 'Intercambio', 'Prácticas', 'Work & Travel', 'Independiente', 'Empleo'];
 const PAISES = {
   chile: { nombre: 'Chile', color: 'var(--c1)' },
   belgica: { nombre: 'Bélgica', color: 'var(--c2)' },

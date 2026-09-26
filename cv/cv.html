@@ -63,7 +63,7 @@
   h2 { display: flex; align-items: baseline; gap: 2.2mm; font-family: var(--mono); font-size: 7.6pt; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink); margin: 0 0 2.4mm; padding-bottom: 1.4mm; border-bottom: 0.25mm solid var(--line); position: relative; }
   h2::after { content: ''; position: absolute; left: 0; bottom: -0.25mm; width: 12mm; height: 0.5mm; background: var(--amber); }
   h2 .n { font-family: var(--doto); font-weight: 800; font-size: 11pt; letter-spacing: 0; color: var(--amber); }
-  section + section { margin-top: 4mm; }
+  section + section { margin-top: 3.6mm; }
 
   .perfil { color: var(--ink-2); font-size: 8.3pt; line-height: 1.48; }
 
@@ -73,7 +73,7 @@
   .tl text { font-family: var(--mono); }
 
   .job { break-inside: avoid; }
-  .job + .job { margin-top: 2.3mm; }
+  .job + .job { margin-top: 2.1mm; }
   .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 3mm; }
   .job-title { font-weight: 600; font-size: 9pt; }
   .job-date { font-family: var(--mono); font-size: 7pt; color: var(--muted); white-space: nowrap; }
@@ -148,7 +148,7 @@
     <main class="main">
       <section>
         <h2><span class="n">01</span>Perfil</h2>
-        <p class="perfil">Ingeniero Comercial con Diploma de Alto Honor Académico y experiencia en contabilidad, finanzas y operaciones en Chile y EE.UU. Hoy soy Administrativo Contable en Maestranza HHH, a cargo de conciliaciones, cuentas por pagar y cobrar y flujo de caja. Automatizo reportes con Python, SQL, BigQuery y Power BI, y trabajo con soltura en inglés y en equipos multiculturales.</p>
+        <p class="perfil">Ingeniero Comercial con Diploma de Alto Honor Académico, prácticas en contabilidad y finanzas y dos temporadas de Work &amp; Travel en EE.UU. Hoy soy Administrativo Contable en Maestranza HHH, a cargo de conciliaciones, cuentas por pagar y cobrar y flujo de caja. Automatizo reportes con Python, SQL, BigQuery y Power BI, y trabajo con soltura en inglés y en equipos multiculturales.</p>
       </section>
 
       <section>
@@ -166,11 +166,11 @@
         </article>
 
         <article class="job">
-          <div class="job-head"><p class="job-title">Work &amp; Travel — Gestión Operativa</p><p class="job-date">Dic. 2024 — Mar. 2025</p></div>
-          <p class="job-org"><i style="background: var(--c3)"></i>Coast Pizza · Girdwood, Alaska, EE.UU.</p>
+          <div class="job-head"><p class="job-title">Profesor particular y conductor de Uber</p><p class="job-date">2025 — 2026</p></div>
+          <p class="job-org"><i style="background: var(--c1)"></i>Trabajo independiente · Temuco, Chile</p>
           <ul class="b">
-            <li>Gestión de producción en un entorno de alta demanda, cumpliendo estándares de calidad bajo presión continua.</li>
-            <li>Trabajo en equipo multicultural con comunicación exclusivamente en inglés.</li>
+            <li>Clases particulares de micro y macroeconomía, contabilidad y finanzas; en paralelo, conductor de Uber.</li>
+            <li>Certificaciones en análisis de datos (Google), Power BI, Excel y freeCodeCamp.</li>
           </ul>
         </article>
 
@@ -180,17 +180,17 @@
           <ul class="b">
             <li>Rediseño en Excel de la planificación de turnos para 150 personas: 100 % de mejora en cobertura operativa, reemplazando un software con fallas recurrentes.</li>
             <li>Registro y digitalización diaria de documentos contables, apoyando la conciliación y el cierre mensual.</li>
-            <li>Consolidación de información financiera de varias áreas en reportes de gestión para gerencia.</li>
-            <li>Revisiones de control interno, identificando desviaciones y proponiendo mejoras administrativas.</li>
+            <li>Reportes de gestión para gerencia y apoyo en revisiones de control interno.</li>
           </ul>
         </article>
 
         <article class="job">
-          <div class="job-head"><p class="job-title">Work &amp; Travel — Operaciones y Calidad</p><p class="job-date">Dic. 2022 — Mar. 2023</p></div>
-          <p class="job-org"><i style="background: var(--c3)"></i>The Charleston Place (5★) · Carolina del Sur, EE.UU.</p>
+          <div class="job-head"><p class="job-title">Work &amp; Travel en EE.UU. — dos temporadas</p><p class="job-date">2022 — 2025</p></div>
+          <p class="job-org"><i style="background: var(--c3)"></i>Carolina del Sur y Alaska, EE.UU.</p>
           <ul class="b">
-            <li>Gestión logística en un hotel cinco estrellas bajo estándares internacionales de calidad.</li>
-            <li>Coordinación en inglés con equipos multiculturales en un entorno de alta exigencia operativa.</li>
+            <li>Dic. 2022 — Mar. 2023: steward en la cocina de The Charleston Place, hotel cinco estrellas.</li>
+            <li>Dic. 2024 — Mar. 2025: line cook en Coast Pizza, Girdwood, Alaska.</li>
+            <li>Trabajo 100 % en inglés, en equipos multiculturales y a ritmo de temporada alta.</li>
           </ul>
         </article>
 
@@ -217,7 +217,7 @@
             <p class="edu-t">Formación en el extranjero</p>
             <p class="edu-o">Hogeschool VIVES · Bélgica</p>
             <p class="edu-d">Sep. 2023 — Ene. 2024</p>
-            <p class="edu-x">Cursos en inglés: Marketing Internacional, Economía Social, Decisiones con IA y Finanzas Aplicadas.</p>
+            <p class="edu-x">Cursos en inglés de marketing internacional, economía social, IA y finanzas.</p>
           </div>
           </div>
         </section>
@@ -235,17 +235,18 @@
       <section>
         <h2><span class="n">04</span>Competencias</h2>
         <div class="grp"><p class="grp-t">Finanzas</p><div class="chips"><span class="chip">Control presupuestario</span><span class="chip">Conciliación contable</span><span class="chip">Flujo de caja</span><span class="chip">KPIs</span><span class="chip">Evaluación de proyectos</span><span class="chip">Control interno</span></div></div>
-        <div class="grp"><p class="grp-t">Datos y herramientas</p><div class="chips"><span class="chip">Excel avanzado</span><span class="chip">Power BI</span><span class="chip">SQL</span><span class="chip">BigQuery</span><span class="chip">Python</span><span class="chip">Tableau</span><span class="chip">Google Sheets</span><span class="chip">MS Office</span></div></div>
-        <div class="grp"><p class="grp-t">IA aplicada</p><div class="chips"><span class="chip">Claude</span><span class="chip">Gemini</span></div></div>
+        <div class="grp"><p class="grp-t">Datos, herramientas e IA</p><div class="chips"><span class="chip">Excel avanzado</span><span class="chip">Power BI</span><span class="chip">SQL</span><span class="chip">BigQuery</span><span class="chip">Python</span><span class="chip">Tableau</span><span class="chip">Google Sheets</span><span class="chip">MS Office</span><span class="chip">Claude</span><span class="chip">Gemini</span></div></div>
         <div class="grp"><p class="grp-t">Idiomas</p><div class="chips"><span class="chip">Español nativo</span><span class="chip">Inglés C1 certificado</span></div></div>
       </section>
 
       <section>
         <h2><span class="n">05</span>Certificaciones</h2>
         <ul class="list">
-          <li><span>Python Intermedio</span><span>certificado</span></li>
+          <li><span>Google Data Analytics</span><span>Coursera</span></li>
           <li><span>Power BI Intermedio</span><span>certificado</span></li>
           <li><span>Excel Avanzado</span><span>certificado</span></li>
+          <li><span>Python Intermedio</span><span>certificado</span></li>
+          <li><span>freeCodeCamp</span><span>certificado</span></li>
           <li><span>Inglés C1 Avanzado</span><span>certificado</span></li>
           <li><span>Licencia de conducir clase B</span><span>vigente</span></li>
         </ul>
@@ -270,11 +271,12 @@ const ETAPAS = [
   { fila: 1, color: '--c2', t: 'VIVES · Bélgica', s: [2023, 9], e: [2024, 1] },
   { fila: 2, color: '--c1', t: 'Agrotop', s: [2021, 12], e: [2022, 3] },
   { fila: 2, color: '--c1', t: 'Agrifor', s: [2024, 8], e: [2024, 11] },
-  { fila: 3, color: '--c3', t: 'Charleston Place', s: [2022, 12], e: [2023, 3] },
-  { fila: 3, color: '--c3', t: 'Coast Pizza · Alaska', s: [2024, 12], e: [2025, 3] },
-  { fila: 4, color: '--c1', t: 'Maestranza HHH', s: [2026, 8], e: null, hoy: true }
+  { fila: 3, color: '--c3', t: 'Charleston', s: [2022, 12], e: [2023, 3] },
+  { fila: 3, color: '--c3', t: 'Alaska', s: [2024, 12], e: [2025, 3] },
+  { fila: 4, color: '--c1', t: 'Clases y Uber', s: [2025, 4], e: [2026, 7], dentro: true },
+  { fila: 5, color: '--c1', t: 'Maestranza HHH', s: [2026, 8], e: null, hoy: true }
 ];
-const FILAS = ['Pregrado', 'Intercambio', 'Prácticas', 'Work & Travel', 'Empleo'];
+const FILAS = ['Pregrado', 'Intercambio', 'Prácticas', 'Work & Travel', 'Independiente', 'Empleo'];
 const now = new Date();
 const mi = ([y, m]) => y * 12 + m - 1;
 const HOY = now.getFullYear() * 12 + now.getMonth();
@@ -285,7 +287,7 @@ document.getElementById('kMeses').textContent = ETAPAS.filter(e => e.fila >= 2)
   .reduce((n, e) => n + ((e.e ? mi(e.e) + 1 : HOY + 1) - mi(e.s)), 0);
 
 const box = document.getElementById('tl');
-const W = box.clientWidth, L = 62, R = W - 2, rowH = 10, T0 = 8, H = T0 + FILAS.length * rowH + 13;
+const W = box.clientWidth, L = 62, R = W - 2, rowH = 9, T0 = 8, H = T0 + FILAS.length * rowH + 13;
 const x = m => L + (m - D0) / (D1 - D0) * (R - L);
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 let s = `<svg viewBox="0 0 ${W} ${H}" height="${H}">`;
