@@ -86,7 +86,7 @@
   ul.b li::before { content: ''; position: absolute; left: 0.3mm; top: 1.55mm; width: 1.2mm; height: 0.3mm; background: var(--amber); }
 
   /* barra lateral */
-  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25mm; background: var(--line); border: 0.25mm solid var(--line); border-radius: 1.6mm; overflow: hidden; margin-bottom: 4.6mm; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25mm; background: var(--line); border: 0.25mm solid var(--line); border-radius: 1.6mm; overflow: hidden; margin-bottom: 3.8mm; }
   .kpi { background: #fff; padding: 2mm 2.4mm 1.8mm; }
   .kpi b { display: block; font-family: var(--doto); font-weight: 800; font-size: 17pt; line-height: 1; color: var(--ink); }
   .kpi span { font-size: 6.6pt; color: var(--muted); line-height: 1.25; display: block; margin-top: 0.8mm; }
@@ -98,13 +98,13 @@
   .edu-x { font-size: 7.5pt; color: var(--ink-2); line-height: 1.4; }
   .hl { color: var(--amber); font-weight: 600; }
 
-  .grp + .grp { margin-top: 2mm; }
+  .grp + .grp { margin-top: 1.6mm; }
   .grp-t { font-family: var(--mono); font-size: 6.6pt; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1mm; }
   .chips { display: flex; flex-wrap: wrap; gap: 0.9mm; }
   .chip { font-family: var(--mono); font-size: 6.8pt; background: #fff; border: 0.25mm solid var(--line); border-radius: 0.9mm; padding: 0.35mm 1.3mm; color: var(--ink-2); white-space: nowrap; }
 
   .list { list-style: none; }
-  .list li { font-size: 7.7pt; color: var(--ink-2); padding: 0.75mm 0; border-bottom: 0.2mm dotted #cfcbc2; display: flex; justify-content: space-between; gap: 2mm; }
+  .list li { font-size: 7.7pt; color: var(--ink-2); padding: 0.6mm 0; border-bottom: 0.2mm dotted #cfcbc2; display: flex; justify-content: space-between; gap: 2mm; }
   .list li:last-child { border-bottom: 0; }
   .list li span:last-child { font-family: var(--mono); font-size: 6.8pt; color: var(--muted); text-align: right; }
 
@@ -170,7 +170,7 @@
           <p class="job-org"><i style="background: var(--c1)"></i>Trabajo independiente · Temuco, Chile</p>
           <ul class="b">
             <li>Año de transición: rendí mi examen de grado, di clases particulares de micro y macroeconomía, contabilidad y finanzas, y trabajé como conductor de Uber.</li>
-            <li>Certificaciones en análisis de datos (Google), Power BI, Excel y freeCodeCamp.</li>
+            <li>Cursos de datos de Google (Coursera); certificaciones en Power BI, Excel y freeCodeCamp.</li>
           </ul>
         </article>
 
@@ -188,7 +188,7 @@
           <div class="job-head"><p class="job-title">Work &amp; Travel en EE.UU. — dos temporadas</p><p class="job-date">2022 — 2025</p></div>
           <p class="job-org"><i style="background: var(--c3)"></i>Carolina del Sur y Alaska, EE.UU.</p>
           <ul class="b">
-            <li>Dic. 2022 — Mar. 2023: steward en la cocina de The Charleston Place, hotel cinco estrellas.</li>
+            <li>Dic. 2022 — Mar. 2023: kitchen assistant (steward) en The Charleston Place, hotel 5★.</li>
             <li>Dic. 2024 — Mar. 2025: line cook en Coast Pizza, Girdwood, Alaska.</li>
             <li>Trabajo 100 % en inglés, en equipos multiculturales y a ritmo de temporada alta.</li>
           </ul>
@@ -216,7 +216,7 @@
           <div class="edu">
             <p class="edu-t">Formación en el extranjero</p>
             <p class="edu-o">Hogeschool VIVES · Bélgica</p>
-            <p class="edu-d">Sep. 2023 — Ene. 2024</p>
+            <p class="edu-d">Ago. 2023 — Ene. 2024</p>
             <p class="edu-x">Cursos en inglés de marketing internacional, economía social, IA y finanzas.</p>
           </div>
           </div>
@@ -242,13 +242,13 @@
       <section>
         <h2><span class="n">05</span>Certificaciones</h2>
         <ul class="list">
-          <li><span>Google Data Analytics</span><span>Coursera</span></li>
+          <li><span>Google: Data Analytics y Data Science · 4 cursos</span><span>Coursera</span></li>
+          <li><span>Data Analysis Using Python</span><span>Coursera</span></li>
           <li><span>Power BI Intermedio</span><span>certificado</span></li>
           <li><span>Excel Avanzado</span><span>certificado</span></li>
           <li><span>Python Intermedio</span><span>certificado</span></li>
           <li><span>freeCodeCamp</span><span>certificado</span></li>
           <li><span>Inglés C1 Avanzado</span><span>certificado</span></li>
-          <li><span>Licencia de conducir clase B</span><span>vigente</span></li>
         </ul>
       </section>
 
@@ -267,8 +267,8 @@
 (function () {
 // Línea de tiempo: mismas etapas que el portafolio, en miniatura.
 const ETAPAS = [
-  { fila: 0, color: '--c1', t: 'Ingeniería Comercial · U. Mayor', s: [2020, 3], e: [2025, 12], dentro: true },
-  { fila: 1, color: '--c2', t: 'VIVES · Bélgica', s: [2023, 9], e: [2024, 1] },
+  { fila: 0, color: '--c1', t: 'Ingeniería Comercial · U. Mayor', s: [2020, 3], e: [2025, 4], dentro: true },
+  { fila: 1, color: '--c2', t: 'VIVES · Bélgica', s: [2023, 8], e: [2024, 1] },
   { fila: 2, color: '--c1', t: 'Agrotop', s: [2021, 12], e: [2022, 3] },
   { fila: 2, color: '--c1', t: 'Agrifor', s: [2024, 8], e: [2024, 11] },
   { fila: 3, color: '--c3', t: 'Charleston', s: [2022, 12], e: [2023, 3] },
